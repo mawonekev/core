@@ -1,0 +1,422 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{% block meta_description %}Discover Tanzania — from the snows of Kilimanjaro to the turquoise shores of Zanzibar.{% endblock %}" />
+  <title>{% block title %}Xenohuru — Explore Tanzania{% endblock %}</title>
+
+  <!-- Canonical & OG -->
+  {% block canonical %}<link rel="canonical" href="{{ CANONICAL_URL }}" />{% endblock %}
+  <meta property="og:site_name" content="Xenohuru" />
+  <meta property="og:title" content="{% block og_title %}Xenohuru — Explore Tanzania{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}Your open-source guide to Tanzania wonders.{% endblock %}" />
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
+  <meta property="og:url" content="{{ CANONICAL_URL }}" />
+  <meta property="og:image" content="{% block og_image %}https://res.cloudinary.com/main-name/image/upload/xenohuru/site/og-image.jpg{% endblock %}" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@xenohuru" />
+  <meta name="robots" content="{% block robots %}index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1{% endblock %}" />
+
+  <!-- Fonts & CDN preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+
+  <!-- Splide & AOS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4/dist/css/splide.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+
+  <!-- Tailwind v4 browser -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-tz-forest:  #1A4731;
+      --color-tz-savanna: #C8903A;
+      --color-tz-sky:     #1E6FA8;
+      --color-tz-sand:    #F5E6C8;
+      --color-tz-earth:   #8B5E3C;
+      --color-tz-dark:    #111827;
+      --color-tz-muted:   #6B7280;
+      --color-tz-light:   #FAFAF8;
+      --font-display: "Playfair Display", serif;
+      --font-body:    "DM Sans", sans-serif;
+      --font-mono:    "Space Mono", monospace;
+    }
+  </style>
+
+  <style>
+          .xh-review-card-v2 {
+        position: relative;
+        flex-shrink: 0;
+        width: 320px;
+        min-height: 220px;
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+        padding-top: 1.75rem;
+        margin: 0 0.75rem;
+        background: linear-gradient(145deg, #ffffff 0%, #fdfcfb 100%);
+        border-radius: 1rem;
+        border: 1px solid rgba(var(--tz-earth-rgb, 194, 178, 158) / 0.12);
+        box-shadow: 
+          0 1px 3px rgba(0, 0, 0, 0.04),
+          0 4px 12px rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+
+      .xh-review-card-v2::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--tz-savanna, #D4A574) 0%, var(--tz-forest, #2D5A4A) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .xh-review-card-v2:hover {
+        transform: translateY(-4px);
+        box-shadow: 
+          0 4px 12px rgba(0, 0, 0, 0.08),
+          0 12px 32px rgba(0, 0, 0, 0.06);
+        border-color: rgba(var(--tz-savanna-rgb, 212, 165, 116) / 0.25);
+      }
+
+      .xh-review-card-v2:hover::before {
+        opacity: 1;
+      }
+
+      /* ---------- MARQUEE TRACK (keep existing structure) ---------- */
+      .xh-marquee-track {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .xh-marquee-track::before,
+      .xh-marquee-track::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100px;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .xh-marquee-track::before {
+        left: 0;
+        background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+      }
+
+      .xh-marquee-track::after {
+        right: 0;
+        background: linear-gradient(to left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+      }
+
+      .xh-marquee-inner {
+        display: flex;
+        width: max-content;
+        animation: marquee-scroll var(--dur, 50s) linear infinite;
+        padding: 1rem 0;
+      }
+
+      .xh-marquee-inner:hover {
+        animation-play-state: paused;
+      }
+
+      .xh-marquee-rev {
+        animation-direction: reverse;
+      }
+
+      @keyframes marquee-scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+
+      /* ---------- PARTNER CAROUSEL ---------- */
+      .partners-splide .splide__track {
+        padding: 1rem 0;
+      }
+
+      .xh-partner-card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem 2rem;
+        min-height: 80px;
+        transition: all 0.3s ease;
+      }
+
+      .xh-partner-card:hover {
+        transform: scale(1.05);
+      }
+
+      /* Splide override for partners */
+      .partners-splide .splide__arrow {
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        opacity: 0.9;
+        width: 40px;
+        height: 40px;
+      }
+
+      .partners-splide .splide__arrow:hover {
+        opacity: 1;
+        background: var(--tz-forest, #2D5A4A);
+      }
+
+      .partners-splide .splide__arrow:hover svg {
+        fill: white;
+      }
+
+      .partners-splide .splide__arrow svg {
+        fill: var(--tz-dark, #1a1a1a);
+        width: 16px;
+        height: 16px;
+      }
+
+      /* ---------- ANNOUNCEMENT TOAST - Premium Slide-in ---------- */
+      .xh-announce-toast {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        z-index: 9999;
+        width: 100%;
+        max-width: 380px;
+        padding: 1.25rem 1.5rem;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 
+          0 4px 12px rgba(0, 0, 0, 0.08),
+          0 20px 48px rgba(0, 0, 0, 0.12);
+        border: 1px solid rgba(var(--tz-earth-rgb, 194, 178, 158) / 0.1);
+      }
+
+      /* Subtle glow effect */
+      .xh-announce-toast::before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, var(--tz-savanna, #D4A574) 0%, var(--tz-forest, #2D5A4A) 100%);
+        opacity: 0.15;
+        z-index: -1;
+        filter: blur(8px);
+      }
+
+      /* Hide with x-cloak until Alpine initializes */
+      [x-cloak] {
+        display: none !important;
+      }
+
+      /* Mobile positioning */
+      @media (max-width: 480px) {
+        .xh-announce-toast {
+          bottom: 1rem;
+          right: 1rem;
+          left: 1rem;
+          max-width: none;
+        }
+      }
+
+      /* ---------- ANNOUNCEMENT BADGES ---------- */
+      .xh-announce-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.625rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        border-radius: 9999px;
+      }
+
+      .xh-announce-badge--new {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+      }
+
+      .xh-announce-badge--update {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+      }
+
+      .xh-announce-badge--event {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        color: white;
+      }
+
+      .xh-announce-badge--promo {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+      }
+
+      .xh-announce-badge--info {
+        background: linear-gradient(135deg, var(--tz-forest, #2D5A4A) 0%, #1e4339 100%);
+        color: white;
+      }
+  </style>
+
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <link rel="manifest" href="https://res.cloudinary.com/main-name/raw/upload/xenohuru/site/site.webmanifest" />
+  <meta name="theme-color" content="#1A4731" />
+  <link rel="icon" type="image/svg+xml" href="https://res.cloudinary.com/main-name/raw/upload/xenohuru/site/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="96x96" href="https://res.cloudinary.com/main-name/image/upload/xenohuru/site/favicon-96x96.png" />
+  <link rel="shortcut icon" href="https://res.cloudinary.com/main-name/image/upload/xenohuru/site/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://res.cloudinary.com/main-name/image/upload/xenohuru/site/favicon-96x96.png" />
+
+  {% block extra_head %}{% endblock %}
+
+  <!-- JSON-LD structured data -->
+  {% block schema_json %}{% endblock %}
+</head>
+
+<body class="bg-tz-light text-tz-dark font-body">
+
+  <div class="preloader" aria-hidden="true"><div class="preloader-spinner"></div></div>
+
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:bg-tz-forest focus:text-white focus:px-4 focus:py-2 focus:rounded">Skip to main content</a>
+
+  <!-- NAVBAR -->
+  <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" aria-label="Main navigation">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <a href="{% url 'web:home' %}" class="flex items-center gap-2 h-10 lg:h-12" aria-label="Xenohuru home">
+          <img src="{% static 'images/xenohuru-logo.svg' %}" alt="Xenohuru" class="h-full" />
+        </a>
+        <ul class="hidden lg:flex items-center gap-1" role="list">
+          <li><a href="{% url 'web:home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active-nav{% endif %} px-3 py-2 text-sm font-medium text-white/90 hover:text-tz-savanna transition-colors rounded">Home</a></li>
+          <li><a href="{% url 'web:attraction-list' %}" class="nav-link {% if 'attraction' in request.resolver_match.url_name %}active-nav{% endif %} px-3 py-2 text-sm font-medium text-white/80 hover:text-tz-savanna transition-colors rounded">Attractions</a></li>
+          <li><a href="{% url 'web:region-list' %}" class="nav-link {% if 'region' in request.resolver_match.url_name %}active-nav{% endif %} px-3 py-2 text-sm font-medium text-white/80 hover:text-tz-savanna transition-colors rounded">Regions</a></li>
+          <li><a href="{% url 'web:blog-list' %}" class="nav-link {% if 'blog' in request.resolver_match.url_name %}active-nav{% endif %} px-3 py-2 text-sm font-medium text-white/80 hover:text-tz-savanna transition-colors rounded">Blog</a></li>
+          <li><a href="{% url 'web:itineraries' %}" class="nav-link {% if request.resolver_match.url_name == 'itineraries' %}active-nav{% endif %} px-3 py-2 text-sm font-medium text-white/80 hover:text-tz-savanna transition-colors rounded">Itineraries</a></li>
+          <li><a href="{% url 'web:weather' %}" class="nav-link {% if request.resolver_match.url_name == 'weather' %}active-nav{% endif %} px-3 py-2 text-sm font-medium text-white/80 hover:text-tz-savanna transition-colors rounded">Weather</a></li>
+          <li><a href="{% url 'web:about' %}" class="nav-link {% if request.resolver_match.url_name == 'about' %}active-nav{% endif %} px-3 py-2 text-sm font-medium text-white/80 hover:text-tz-savanna transition-colors rounded">About</a></li>
+          <li><a href="{% url 'web:contact' %}" class="nav-link {% if request.resolver_match.url_name == 'contact' %}active-nav{% endif %} px-3 py-2 text-sm font-medium text-white/80 hover:text-tz-savanna transition-colors rounded">Contact</a></li>
+        </ul>
+        <div class="flex items-center gap-3">
+          <div class="hidden md:flex items-center gap-1.5 text-white/70 text-xs font-mono">
+            <i data-lucide="clock" class="w-3.5 h-3.5" aria-hidden="true"></i>
+            <span id="nav-time" class="time-display">--:--</span>
+            <span class="text-white/40">EAT</span>
+          </div>
+          <div class="lang-switcher hidden sm:block text-white">
+            <select id="lang-switcher" aria-label="Select language">
+              <option value="en">EN</option>
+              <option value="sw">SW</option>
+            </select>
+          </div>
+          <a href="{% url 'web:attraction-list' %}" class="hidden md:inline-flex items-center gap-2 bg-tz-savanna text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-tz-savanna/90 transition-colors">Explore Now</a>
+          <button id="mobile-toggle" class="lg:hidden text-white p-2" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div id="mobile-overlay" class="fixed inset-0 z-40 bg-black/50" aria-hidden="true"></div>
+  <aside id="mobile-drawer" class="fixed top-0 left-0 z-50 h-full w-72 bg-white shadow-xl" aria-label="Mobile navigation" aria-hidden="true">
+    <div class="flex items-center justify-between p-4 border-b border-gray-100">
+      <a href="{% url 'web:home' %}" class="flex items-center gap-2 h-10">
+        <img src="{% static 'images/favicons/xenohuru-favicon.svg' %}" alt="Xenohuru" class="h-full" />
+      </a>
+      <button id="mobile-close" class="p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Close menu">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <nav class="p-4" aria-label="Mobile navigation links">
+      <ul class="flex flex-col gap-1" role="list">
+        <li><a href="{% url 'web:home' %}" class="block px-4 py-3 rounded-xl font-medium hover:bg-tz-sand hover:text-tz-forest transition-colors">Home</a></li>
+        <li><a href="{% url 'web:attraction-list' %}" class="block px-4 py-3 rounded-xl font-medium hover:bg-tz-sand hover:text-tz-forest transition-colors">Attractions</a></li>
+        <li><a href="{% url 'web:region-list' %}" class="block px-4 py-3 rounded-xl font-medium hover:bg-tz-sand hover:text-tz-forest transition-colors">Regions</a></li>
+        <li><a href="{% url 'web:blog-list' %}" class="block px-4 py-3 rounded-xl font-medium hover:bg-tz-sand hover:text-tz-forest transition-colors">Blog</a></li>
+        <li><a href="{% url 'web:weather' %}" class="block px-4 py-3 rounded-xl font-medium hover:bg-tz-sand hover:text-tz-forest transition-colors">Weather</a></li>
+        <li><a href="{% url 'web:about' %}" class="block px-4 py-3 rounded-xl font-medium hover:bg-tz-sand hover:text-tz-forest transition-colors">About</a></li>
+        <li><a href="{% url 'web:contact' %}" class="block px-4 py-3 rounded-xl font-medium hover:bg-tz-sand hover:text-tz-forest transition-colors">Contact</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-tz-dark text-white" aria-label="Site footer">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-10">
+        <div class="col-span-2 sm:col-span-4 lg:col-span-2">
+          <a href="{% url 'web:home' %}" class="flex items-center gap-2 mb-4">
+            <img src="{% static 'images/favicons/xenohuru-favicon.svg' %}" alt="Xenohuru" class="h-8 w-8" />
+            <span class="font-display text-lg font-bold">Xenohuru</span>
+          </a>
+          <p class="text-white/60 text-sm leading-relaxed mb-4">Your open-source guide to the wonders of Tanzania — built by the community, for the curious. #HakunaMatata</p>
+          <div class="flex items-center gap-2 text-white/50 text-xs font-mono">
+            <i data-lucide="clock" class="w-3.5 h-3.5" aria-hidden="true"></i>
+            <span id="footer-time" class="time-display">--:--:-- EAT</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-white/90 mb-4 uppercase tracking-wider text-xs">Discover</h3>
+          <ul class="flex flex-col gap-2.5 text-sm text-white/60" role="list">
+            <li><a href="{% url 'web:home' %}" class="hover:text-white transition-colors">Home</a></li>
+            <li><a href="{% url 'web:attraction-list' %}" class="hover:text-white transition-colors">Attractions</a></li>
+            <li><a href="{% url 'web:region-list' %}" class="hover:text-white transition-colors">Regions</a></li>
+            <li><a href="{% url 'web:blog-list' %}" class="hover:text-white transition-colors">Blog</a></li>
+            <li><a href="{% url 'web:itineraries' %}" class="hover:text-white transition-colors">Itineraries</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-white/90 mb-4 uppercase tracking-wider text-xs">Plan</h3>
+          <ul class="flex flex-col gap-2.5 text-sm text-white/60" role="list">
+            <li><a href="{% url 'web:weather' %}" class="hover:text-white transition-colors">Weather</a></li>
+            <li><a href="{% url 'web:search' %}" class="hover:text-white transition-colors">Search</a></li>
+            <li><a href="{% url 'web:faq' %}" class="hover:text-white transition-colors">FAQ</a></li>
+          </ul>
+          <h3 class="font-semibold text-white/90 mt-6 mb-4 uppercase tracking-wider text-xs">Community</h3>
+          <ul class="flex flex-col gap-2.5 text-sm text-white/60" role="list">
+            <li><a href="{% url 'web:about' %}" class="hover:text-white transition-colors">About</a></li>
+            <li><a href="{% url 'web:contributors' %}" class="hover:text-white transition-colors">Contributors</a></li>
+            <li><a href="{% url 'web:sponsor' %}" class="hover:text-white transition-colors">Sponsor</a></li>
+            <li><a href="{% url 'web:contact' %}" class="hover:text-white transition-colors">Contact</a></li>
+            <li><a href="https://github.com/xenohuru" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-white transition-colors"><i data-lucide="github" class="w-3.5 h-3.5"></i> GitHub</a></li>
+            <li><a href="/api/docs/" target="_blank" class="flex items-center gap-1.5 hover:text-white transition-colors"><i data-lucide="code-2" class="w-3.5 h-3.5"></i> API Docs</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-white/40 text-sm">
+        <p>&copy; <span id="current-year"></span> Xenohuru. Open source under MIT License.</p>
+        <p class="swahili-quote text-white/30 text-xs">"Pole pole ndio mwendo" — Slowly slowly is the way</p>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" class="fixed bottom-6 right-6 z-50 bg-tz-forest text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-tz-forest/90 transition-all duration-300" aria-label="Back to top">
+    <i data-lucide="arrow-up" class="w-5 h-5"></i>
+  </button>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4/dist/js/splide.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3/dist/cdn.min.js"></script>
+  <script defer src="https://unpkg.com/alpinejs@3/dist/cdn.min.js"></script>
+  <script src="{% static 'js/main.js' %}" defer></script>
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

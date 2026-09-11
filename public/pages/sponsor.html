@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+{% load static web_extras %}
+
+{% block title %}Support Xenohuru — Sponsorship & Ways to Help{% endblock %}
+{% block meta_description %}Help build the future of Tanzania travel. Sponsor Xenohuru — a free, open-source platform. No paywalls, no ads, community-funded.{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="bg-tz-savanna pt-32 pb-16 px-4 text-center">
+  <span class="inline-block bg-white/20 text-white text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-4">Launching Soon — Be a Founding Sponsor</span>
+  <h1 class="font-display text-4xl sm:text-5xl font-black text-white mb-4 leading-tight">Help Build the Future<br class="hidden sm:block" /> of Tanzania Travel</h1>
+  <p class="text-white/80 text-lg max-w-2xl mx-auto mb-10">Xenohuru is free, open-source, and community-driven. Sponsorships pay the bills so we can keep it that way — no paywalls, no ads, no data selling. Ever.</p>
+
+  <div class="flex flex-wrap justify-center gap-10 text-white mb-10">
+    <div class="text-center"><p class="text-3xl font-bold font-display">250+</p><p class="text-white/60 text-sm mt-0.5">Attractions mapped</p></div>
+    <div class="text-center"><p class="text-3xl font-bold font-display">30+</p><p class="text-white/60 text-sm mt-0.5">Tanzania regions</p></div>
+    <div class="text-center"><p class="text-3xl font-bold font-display">100%</p><p class="text-white/60 text-sm mt-0.5">Open source</p></div>
+    <div class="text-center"><p class="text-3xl font-bold font-display">0</p><p class="text-white/60 text-sm mt-0.5">Sponsors so far — be first</p></div>
+  </div>
+
+  <div class="flex flex-wrap gap-3 justify-center">
+    <a href="#tiers" class="bg-white text-tz-savanna font-bold px-6 py-3 rounded-xl hover:bg-amber-50 transition-colors">See Sponsorship Tiers</a>
+    <a href="#other-ways" class="bg-white/10 border border-white/30 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/20 transition-colors">Other Ways to Help</a>
+  </div>
+</section>
+
+<!-- WHERE FUNDS GO -->
+<section class="bg-white border-b border-gray-100 py-12">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <i data-lucide="trending-up" class="w-6 h-6 text-tz-savanna mx-auto mb-3"></i>
+    <h2 class="font-display text-xl font-bold text-tz-dark mb-1">Where Every Dollar Goes</h2>
+    <p class="text-sm text-tz-muted mb-8">100% transparent — no hidden salaries, no marketing budget.</p>
+    <div class="space-y-4 text-left">
+      <div>
+        <div class="flex items-center justify-between text-sm mb-1.5">
+          <span class="flex items-center gap-2 text-tz-dark font-medium"><i data-lucide="server" class="w-4 h-4 text-tz-muted"></i> Hosting & Infrastructure</span>
+          <span class="font-bold text-tz-dark">35%</span>
+        </div>
+        <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500 rounded-full" style="width:35%"></div></div>
+      </div>
+      <div>
+        <div class="flex items-center justify-between text-sm mb-1.5">
+          <span class="flex items-center gap-2 text-tz-dark font-medium"><i data-lucide="database" class="w-4 h-4 text-tz-muted"></i> Data & API maintenance</span>
+          <span class="font-bold text-tz-dark">25%</span>
+        </div>
+        <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-blue-500 rounded-full" style="width:25%"></div></div>
+      </div>
+      <div>
+        <div class="flex items-center justify-between text-sm mb-1.5">
+          <span class="flex items-center gap-2 text-tz-dark font-medium"><i data-lucide="code-2" class="w-4 h-4 text-tz-muted"></i> Feature development</span>
+          <span class="font-bold text-tz-dark">25%</span>
+        </div>
+        <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-green-500 rounded-full" style="width:25%"></div></div>
+      </div>
+      <div>
+        <div class="flex items-center justify-between text-sm mb-1.5">
+          <span class="flex items-center gap-2 text-tz-dark font-medium"><i data-lucide="pen-line" class="w-4 h-4 text-tz-muted"></i> Content & travel guides</span>
+          <span class="font-bold text-tz-dark">15%</span>
+        </div>
+        <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-purple-500 rounded-full" style="width:15%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section id="tiers" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <h2 class="font-display text-2xl font-bold text-tz-dark text-center mb-2">Sponsorship Tiers</h2>
+  <p class="text-tz-muted text-center mb-10 text-sm max-w-lg mx-auto">Monthly — cancel anytime. Custom one-time amounts available on request.</p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <!-- Community Backer -->
+    <div class="border-2 border-rose-200 bg-rose-50 rounded-2xl p-6 flex flex-col" data-aos="fade-up">
+      <div class="mb-2"><i data-lucide="heart" class="w-6 h-6 text-rose-500"></i></div>
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full self-start mb-2 bg-rose-100 text-rose-700">Community Backer</span>
+      <p class="font-display text-2xl font-black text-tz-dark mb-1">$10 / mo</p>
+      <p class="text-xs text-tz-muted italic mb-4 border-l-2 border-tz-savanna/40 pl-2">Covers 1 week of API hosting costs</p>
+      <ul class="space-y-2 mb-6 flex-1">
+        {% for perk in "Name on Supporters wall (permanent)|Monthly platform growth digest|Direct feedback channel to founders|Priority access to new features"|split:"|" %}
+        <li class="flex items-start gap-2 text-sm text-tz-dark/80"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-green-600 mt-0.5 flex-shrink-0"></i> {{ perk }}</li>
+        {% endfor %}
+      </ul>
+      <a href="#contact" class="text-center text-sm font-semibold py-2.5 rounded-lg bg-white border border-gray-200 text-tz-dark hover:border-tz-savanna hover:text-tz-savanna transition-all">Get Started →</a>
+    </div>
+
+    <!-- Explorer -->
+    <div class="border-2 border-amber-200 bg-amber-50 rounded-2xl p-6 flex flex-col" data-aos="fade-up" data-aos-delay="50">
+      <div class="mb-2"><i data-lucide="star" class="w-6 h-6 text-amber-500"></i></div>
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full self-start mb-2 bg-amber-100 text-amber-800">Explorer</span>
+      <p class="font-display text-2xl font-black text-tz-dark mb-1">$50 / mo</p>
+      <p class="text-xs text-tz-muted italic mb-4 border-l-2 border-tz-savanna/40 pl-2">Covers a full month of server & database</p>
+      <ul class="space-y-2 mb-6 flex-1">
+        {% for perk in "Logo in homepage footer (linked)|Featured in monthly newsletter|Early access to new features|Quarterly impact report with metrics|All Community Backer perks"|split:"|" %}
+        <li class="flex items-start gap-2 text-sm text-tz-dark/80"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-green-600 mt-0.5 flex-shrink-0"></i> {{ perk }}</li>
+        {% endfor %}
+      </ul>
+      <a href="#contact" class="text-center text-sm font-semibold py-2.5 rounded-lg bg-white border border-gray-200 text-tz-dark hover:border-tz-savanna hover:text-tz-savanna transition-all">Get Started →</a>
+    </div>
+
+    <!-- Pioneer (highlighted) -->
+    <div class="relative border-2 border-blue-300 bg-blue-50 rounded-2xl p-6 flex flex-col ring-2 ring-tz-savanna ring-offset-2 shadow-lg" data-aos="fade-up" data-aos-delay="100">
+      <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-tz-savanna text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">Most Popular</span>
+      <div class="mb-2"><i data-lucide="zap" class="w-6 h-6 text-blue-500"></i></div>
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full self-start mb-2 bg-blue-100 text-blue-800">Pioneer</span>
+      <p class="font-display text-2xl font-black text-tz-dark mb-1">$200 / mo</p>
+      <p class="text-xs text-tz-muted italic mb-4 border-l-2 border-tz-savanna/40 pl-2">Funds a new feature + content team for a month</p>
+      <ul class="space-y-2 mb-6 flex-1">
+        {% for perk in "Prominent logo on all listing pages|Dedicated sponsor profile page|Co-branded Tanzania destination guides|Full REST API access for your team|Monthly call with founders|Input on product roadmap|All Explorer perks"|split:"|" %}
+        <li class="flex items-start gap-2 text-sm text-tz-dark/80"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-green-600 mt-0.5 flex-shrink-0"></i> {{ perk }}</li>
+        {% endfor %}
+      </ul>
+      <a href="#contact" class="text-center text-sm font-semibold py-2.5 rounded-lg bg-tz-savanna text-white hover:bg-tz-savanna/90 transition-all">Get Started →</a>
+    </div>
+
+    <!-- Guardian -->
+    <div class="border-2 border-purple-200 bg-purple-50 rounded-2xl p-6 flex flex-col" data-aos="fade-up" data-aos-delay="150">
+      <div class="mb-2"><i data-lucide="crown" class="w-6 h-6 text-purple-500"></i></div>
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full self-start mb-2 bg-purple-100 text-purple-800">Guardian</span>
+      <p class="font-display text-2xl font-black text-tz-dark mb-1">$1 000+ / mo</p>
+      <p class="text-xs text-tz-muted italic mb-4 border-l-2 border-tz-savanna/40 pl-2">Sustains the entire platform for a month</p>
+      <ul class="space-y-2 mb-6 flex-1">
+        {% for perk in "Top banner placement across the platform|Custom feature development (priority queue)|Named in all press releases & announcements|Full API partnership & white-label options|Dedicated account manager|Real-time analytics dashboard|All Pioneer perks"|split:"|" %}
+        <li class="flex items-start gap-2 text-sm text-tz-dark/80"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-green-600 mt-0.5 flex-shrink-0"></i> {{ perk }}</li>
+        {% endfor %}
+      </ul>
+      <a href="#contact" class="text-center text-sm font-semibold py-2.5 rounded-lg bg-white border border-gray-200 text-tz-dark hover:border-tz-savanna hover:text-tz-savanna transition-all">Get Started →</a>
+    </div>
+  </div>
+
+  <p class="text-center text-sm text-tz-muted mt-6">
+    Need a custom amount or a one-time contribution? <a href="#contact" class="text-tz-savanna hover:underline font-medium">Tell us what works for you →</a>
+  </p>
+</section>
+
+<!-- OTHER WAYS -->
+<section id="other-ways" class="bg-white border-y border-gray-100 py-14">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <h2 class="font-display text-2xl font-bold text-tz-dark mb-2">Can't Sponsor Financially?</h2>
+      <p class="text-sm text-tz-muted max-w-lg mx-auto">There are many ways to make Xenohuru better. Every star, share, and line of code counts.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <a href="https://github.com/xenohuru" target="_blank" rel="noopener noreferrer" class="group bg-tz-light border border-gray-100 rounded-xl p-5 hover:border-tz-savanna hover:shadow-sm transition-all">
+        <div class="flex items-center gap-3 mb-2"><div class="p-2 bg-white border border-gray-100 rounded-lg group-hover:border-tz-savanna transition-colors"><i data-lucide="github" class="w-5 h-5 text-tz-dark"></i></div><h3 class="font-semibold text-tz-dark">Star on GitHub</h3></div>
+        <p class="text-sm text-tz-muted mb-3">A star boosts discoverability and signals credibility to contributors.</p>
+        <span class="text-xs font-bold text-tz-savanna flex items-center gap-1">Star the repo <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+      </a>
+      <a href="https://github.com/xenohuru" target="_blank" rel="noopener noreferrer" class="group bg-tz-light border border-gray-100 rounded-xl p-5 hover:border-tz-savanna hover:shadow-sm transition-all">
+        <div class="flex items-center gap-3 mb-2"><div class="p-2 bg-white border border-gray-100 rounded-lg group-hover:border-tz-savanna transition-colors"><i data-lucide="git-pull-request" class="w-5 h-5 text-blue-600"></i></div><h3 class="font-semibold text-tz-dark">Contribute Code</h3></div>
+        <p class="text-sm text-tz-muted mb-3">Fix a bug, add a feature, or improve translations. All PRs welcome.</p>
+        <span class="text-xs font-bold text-tz-savanna flex items-center gap-1">Open an issue <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+      </a>
+      <a href="{% url 'web:attraction-list' %}" class="group bg-tz-light border border-gray-100 rounded-xl p-5 hover:border-tz-savanna hover:shadow-sm transition-all">
+        <div class="flex items-center gap-3 mb-2"><div class="p-2 bg-white border border-gray-100 rounded-lg group-hover:border-tz-savanna transition-colors"><i data-lucide="map-pin" class="w-5 h-5 text-tz-savanna"></i></div><h3 class="font-semibold text-tz-dark">Add Attraction Data</h3></div>
+        <p class="text-sm text-tz-muted mb-3">Know a hidden gem in Tanzania? Submit it through the platform.</p>
+        <span class="text-xs font-bold text-tz-savanna flex items-center gap-1">Browse attractions <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+      </a>
+      <a href="{% url 'web:blog-list' %}" class="group bg-tz-light border border-gray-100 rounded-xl p-5 hover:border-tz-savanna hover:shadow-sm transition-all">
+        <div class="flex items-center gap-3 mb-2"><div class="p-2 bg-white border border-gray-100 rounded-lg group-hover:border-tz-savanna transition-colors"><i data-lucide="pen-line" class="w-5 h-5 text-green-600"></i></div><h3 class="font-semibold text-tz-dark">Write a Travel Guide</h3></div>
+        <p class="text-sm text-tz-muted mb-3">Travellers, locals, researchers — share your Tanzania knowledge.</p>
+        <span class="text-xs font-bold text-tz-savanna flex items-center gap-1">View the blog <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+      </a>
+      <a href="https://twitter.com/intent/tweet?text=Discover+Tanzania+with+Xenohuru+%E2%80%94+open+source+travel+platform&url=https://xenohuru.com" target="_blank" rel="noopener noreferrer" class="group bg-tz-light border border-gray-100 rounded-xl p-5 hover:border-tz-savanna hover:shadow-sm transition-all">
+        <div class="flex items-center gap-3 mb-2"><div class="p-2 bg-white border border-gray-100 rounded-lg group-hover:border-tz-savanna transition-colors"><i data-lucide="share-2" class="w-5 h-5 text-rose-500"></i></div><h3 class="font-semibold text-tz-dark">Share Xenohuru</h3></div>
+        <p class="text-sm text-tz-muted mb-3">Tell fellow travellers, tourism groups, or social media audiences.</p>
+        <span class="text-xs font-bold text-tz-savanna flex items-center gap-1">Share the link <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+      </a>
+      <a href="https://ko-fi.com/xenohuru" target="_blank" rel="noopener noreferrer" class="group bg-tz-light border border-gray-100 rounded-xl p-5 hover:border-tz-savanna hover:shadow-sm transition-all">
+        <div class="flex items-center gap-3 mb-2"><div class="p-2 bg-white border border-gray-100 rounded-lg group-hover:border-tz-savanna transition-colors"><i data-lucide="coffee" class="w-5 h-5 text-amber-600"></i></div><h3 class="font-semibold text-tz-dark">Buy Us a Coffee</h3></div>
+        <p class="text-sm text-tz-muted mb-3">A one-time gesture to keep the team caffeinated and coding.</p>
+        <span class="text-xs font-bold text-tz-savanna flex items-center gap-1">Buy a coffee <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER TYPES -->
+<section class="max-w-4xl mx-auto px-4 sm:px-6 py-12 text-center">
+  <h2 class="font-display text-xl font-bold text-tz-dark mb-2">Who Should Sponsor?</h2>
+  <p class="text-sm text-tz-muted mb-7">Any organisation or individual aligned with Tanzania's tourism, conservation, or open data.</p>
+  <div class="flex flex-wrap justify-center gap-3">
+    {% for partner in "Tourism Board / NGO|Tour Operator / Agency|Media / Travel Blog|Tech / SaaS Company|Conservation / Environment|Individual Supporter"|split:"|" %}
+    <span class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-full text-sm text-tz-dark shadow-sm">{{ partner }}</span>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ENQUIRY FORM -->
+<section id="contact" class="bg-white border-t border-gray-100 py-16"
+         x-data="{
+           name: '', email: '', organisation: '', tier: '', partner_type: '', message: '',
+           submitting: false, submitted: false, error: '',
+           async submit() {
+             this.submitting = true; this.error = '';
+             const body = JSON.stringify({
+               name: this.name, email: this.email,
+               feedback_type: 'partnership_inquiry',
+               subject: 'Sponsorship Enquiry — ' + (this.tier || 'General'),
+               message: 'Organisation: ' + (this.organisation||'N/A') + '\nTier: ' + (this.tier||'Not specified') + '\nPartner type: ' + (this.partner_type||'Not specified') + '\n\n' + this.message
+             });
+             try {
+               const r = await fetch('/api/v1/feedback/submit/', {
+                 method: 'POST',
+                 headers: {'Content-Type': 'application/json', 'X-CSRFToken': document.cookie.match(/csrftoken=([^;]+)/)?.[1]||''},
+                 body
+               });
+               if (r.ok) this.submitted = true;
+               else { const d = await r.json(); this.error = d.message || d.detail || 'Failed to send. Please try again.'; }
+             } catch { this.error = 'Network error. Please try again.'; }
+             this.submitting = false;
+           }
+         }">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 scroll-mt-20">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-11 h-11 bg-amber-100 rounded-xl mb-3"><i data-lucide="mail" class="w-5 h-5 text-tz-savanna"></i></div>
+      <h2 class="font-display text-2xl font-bold text-tz-dark mb-1">Send a Sponsorship Enquiry</h2>
+      <p class="text-sm text-tz-muted">We reply within 48 hours. No middlemen — direct conversation with the team.</p>
+    </div>
+
+    <!-- Success -->
+    <div x-show="submitted" x-cloak class="bg-green-50 border border-green-200 rounded-2xl p-10 text-center">
+      <i data-lucide="check-circle" class="w-10 h-10 text-green-500 mx-auto mb-4"></i>
+      <h3 class="font-bold text-lg text-tz-dark mb-2">Enquiry received!</h3>
+      <p class="text-tz-muted text-sm mb-6">Thank you, <strong x-text="name"></strong>. We'll reply to <strong x-text="email"></strong> within 48 hours.</p>
+      <a href="{% url 'web:home' %}" class="bg-tz-savanna text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-tz-savanna/90 transition-colors inline-block">Back to Home</a>
+    </div>
+
+    <!-- Form -->
+    <form x-show="!submitted" @submit.prevent="submit" class="space-y-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-medium text-tz-dark mb-1">Full Name *</label>
+          <input type="text" required x-model="name" placeholder="Grace Paul" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-tz-savanna transition-colors" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-tz-dark mb-1">Email *</label>
+          <input type="email" required x-model="email" placeholder="grace@example.com" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-tz-savanna transition-colors" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-tz-dark mb-1">Organisation / Company</label>
+        <input type="text" x-model="organisation" placeholder="Acme Tours Ltd" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-tz-savanna transition-colors" />
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-medium text-tz-dark mb-1">Tier Interest</label>
+          <select x-model="tier" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-tz-savanna transition-colors bg-white">
+            <option value="">Select a tier…</option>
+            <option value="Community Backer">Community Backer — $10/mo</option>
+            <option value="Explorer">Explorer — $50/mo</option>
+            <option value="Pioneer">Pioneer — $200/mo</option>
+            <option value="Guardian">Guardian — $1 000+/mo</option>
+            <option value="Custom / One-time">Custom / One-time</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-tz-dark mb-1">Partner Type</label>
+          <select x-model="partner_type" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-tz-savanna transition-colors bg-white">
+            <option value="">Select type…</option>
+            {% for t in "Tourism Board / NGO|Tour Operator / Agency|Media / Travel Blog|Tech / SaaS Company|Conservation / Environment|Individual Supporter"|split:"|" %}
+            <option value="{{ t }}">{{ t }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-tz-dark mb-1">Message *</label>
+        <textarea required rows="5" x-model="message" placeholder="Tell us about your organisation and how you'd like to support Xenohuru." class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-tz-savanna transition-colors resize-none"></textarea>
+      </div>
+
+      <p x-show="error" x-text="error" x-cloak class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2"></p>
+
+      <button type="submit" :disabled="submitting" class="bg-tz-savanna text-white w-full py-3 rounded-xl font-bold text-base hover:bg-tz-savanna/90 transition-colors disabled:opacity-50">
+        <span x-text="submitting ? 'Sending…' : 'Send Enquiry →'"></span>
+      </button>
+
+      <p class="text-xs text-center text-tz-muted">Or email directly: <a href="mailto:sponsor@xenohuru.org" class="text-tz-savanna hover:underline">sponsor@xenohuru.org</a></p>
+    </form>
+  </div>
+</section>
+
+<!-- MINI FAQ -->
+<section class="max-w-2xl mx-auto px-4 sm:px-6 py-14" x-data="{ open: '' }">
+  <h2 class="font-display text-xl font-bold text-tz-dark text-center mb-6">Frequently Asked Questions</h2>
+  <div class="space-y-3">
+    {% for faq in "Is Xenohuru really free to use?~Yes — completely. The platform is free for travellers, researchers, and developers. Sponsorships fund the infrastructure and development, not a paywall.|Can I cancel my sponsorship anytime?~Absolutely. Monthly sponsorships have no lock-in. Cancel anytime with zero penalty. We'll still appreciate the time you contributed.|How do I know funds are used well?~Every Pioneer and Guardian sponsor receives a quarterly impact report with real numbers — server costs, features shipped, traffic growth, and data added.|Can my business get a tax receipt?~We can provide an invoice for sponsorship payments. Reach out via the form above and we'll arrange the paperwork.|Do you accept one-time sponsorships?~Yes. Just select \"Custom / One-time\" in the tier dropdown and describe the amount you're comfortable with.|What if I can't afford a monthly tier?~There are many free ways to help — star the GitHub repo, share on social media, write a travel guide, or add attraction data."|split:"|" %}
+    {% with parts=faq|split:"~" %}
+    {% with key="sfaq-"|add:forloop.counter0|stringformat:"s" %}
+    <div class="border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+      <button @click="open = open === '{{ key }}' ? '' : '{{ key }}'" class="w-full flex items-center justify-between px-5 py-4 text-left text-tz-dark font-medium hover:bg-tz-light transition-colors">
+        <span>{{ parts.0 }}</span>
+        <i :data-lucide="open === '{{ key }}' ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0"></i>
+      </button>
+      <div x-show="open === '{{ key }}'" x-collapse class="px-5 pb-4 text-sm text-tz-dark/80 border-t border-gray-100 pt-3 bg-tz-light">{{ parts.1 }}</div>
+    </div>
+    {% endwith %}
+    {% endwith %}
+    {% endfor %}
+  </div>
+</section>
+
+<!-- OPEN SOURCE FOOTER NOTE -->
+<section class="bg-white border-t border-gray-100 py-10 text-center px-4">
+  <i data-lucide="github" class="w-6 h-6 text-tz-dark mx-auto mb-3"></i>
+  <h3 class="font-bold text-tz-dark mb-1">Xenohuru is Open Source</h3>
+  <p class="text-sm text-tz-muted max-w-sm mx-auto mb-5">The code is public, the data is open, and every contribution is credited.</p>
+  <div class="flex justify-center gap-3 flex-wrap">
+    <a href="https://github.com/xenohuru" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 border border-gray-200 bg-white text-tz-dark px-5 py-2.5 rounded-xl text-sm font-semibold hover:border-tz-savanna transition-colors">
+      <i data-lucide="github" class="w-4 h-4"></i> View on GitHub
+    </a>
+    <a href="{% url 'web:contributors' %}" class="flex items-center gap-2 bg-tz-savanna text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-tz-savanna/90 transition-colors">
+      <i data-lucide="users" class="w-4 h-4"></i> View Contributors
+    </a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tanzania Attractions — Discover {{ total }} Destinations | Xenohuru{% endblock %}
+{% block meta_description %}Explore {{ total }} verified Tanzania attractions — national parks, mountains, beaches, wildlife safaris and more. GPS-accurate guides with real traveller tips.{% endblock %}
+{% block robots %}{% if filters.category or filters.region or filters.difficulty or filters.q %}noindex, follow{% else %}index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1{% endif %}{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","name":"Tanzania Attractions","description":"Explore verified Tanzania attractions — national parks, mountains, beaches, wildlife safaris and more.","url":"{{ CANONICAL_URL }}","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Xenohuru","url":"{{ SITE_URL }}"},"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ SITE_URL }}"},{"@type":"ListItem","position":2,"name":"Attractions","item":"{{ CANONICAL_URL }}"}]}}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="relative pt-32 pb-20 bg-tz-forest overflow-hidden hero-grain" aria-label="Attractions hero">
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute inset-0 dot-pattern"></div>
+  </div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white text-center">
+    <p class="text-tz-savanna text-xs font-mono tracking-[0.2em] uppercase mb-3" data-aos="fade-up">Explore Tanzania</p>
+    <h1 class="font-display text-5xl font-black mb-4" data-aos="fade-up" data-aos-delay="100">Tanzania Attractions</h1>
+    <p class="text-white/70 text-lg max-w-xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="200">{{ total }} verified destinations — from arctic summits to coral reefs</p>
+
+    <!-- Search -->
+    <form method="get" action="{% url 'web:attraction-list' %}" class="max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="300">
+      <div class="relative">
+        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-tz-muted"></i>
+        <input type="text" name="q" value="{{ filters.q }}" placeholder="Search attractions…" class="w-full pl-12 pr-4 py-4 rounded-full text-tz-dark bg-white shadow-lg focus:outline-none focus:ring-2 focus:ring-tz-savanna text-sm" />
+        {% if filters.category %}<input type="hidden" name="category" value="{{ filters.category }}" />{% endif %}
+        {% if filters.region %}<input type="hidden" name="region" value="{{ filters.region }}" />{% endif %}
+        {% if filters.difficulty %}<input type="hidden" name="difficulty" value="{{ filters.difficulty }}" />{% endif %}
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- FILTERS + GRID -->
+<section class="py-10 bg-tz-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Filter pills -->
+    <div class="flex flex-wrap gap-2 mb-8 items-center" data-aos="fade-up">
+      <span class="text-tz-muted text-sm font-medium mr-2">Filter:</span>
+
+      <a href="{% url 'web:attraction-list' %}{% if filters.q %}?q={{ filters.q }}{% endif %}" class="filter-pill text-sm px-4 py-2 rounded-full border border-gray-200 {% if not filters.category and not filters.difficulty and not filters.region %}active{% endif %}">All</a>
+
+      {% for val, label in categories %}
+      <a href="?category={{ val }}{% if filters.q %}&q={{ filters.q }}{% endif %}" class="filter-pill text-sm px-4 py-2 rounded-full border border-gray-200 {% if filters.category == val %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <!-- Region + Difficulty dropdowns -->
+    <form method="get" class="flex flex-wrap gap-3 mb-8" data-aos="fade-up" data-aos-delay="50">
+      {% if filters.q %}<input type="hidden" name="q" value="{{ filters.q }}" />{% endif %}
+      {% if filters.category %}<input type="hidden" name="category" value="{{ filters.category }}" />{% endif %}
+      <select name="region" onchange="this.form.submit()" class="text-sm border border-gray-200 rounded-full px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-tz-forest text-tz-dark">
+        <option value="">All Regions</option>
+        {% for region in regions %}<option value="{{ region.slug }}" {% if filters.region == region.slug %}selected{% endif %}>{{ region.name }}</option>{% endfor %}
+      </select>
+      <select name="difficulty" onchange="this.form.submit()" class="text-sm border border-gray-200 rounded-full px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-tz-forest text-tz-dark">
+        <option value="">All Difficulties</option>
+        {% for val, label in difficulties %}<option value="{{ val }}" {% if filters.difficulty == val %}selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+      {% if filters.q or filters.category or filters.region or filters.difficulty %}
+      <a href="{% url 'web:attraction-list' %}" class="text-sm text-tz-muted flex items-center gap-1 hover:text-tz-dark transition-colors">
+        <i data-lucide="x" class="w-4 h-4"></i> Clear
+      </a>
+      {% endif %}
+    </form>
+
+    <!-- Results -->
+    {% if attractions %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {% for attraction in attractions %}
+      <a href="{% url 'web:attraction-detail' attraction.slug %}" class="attraction-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|divisibleby:4|yesno:'0,50,100,150' }}">
+        <div class="relative overflow-hidden h-52">
+          {% if attraction.featured_image %}
+          <img src="{{ attraction.featured_image.url }}" alt="{{ attraction.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 reveal-image" loading="lazy" />
+          {% else %}
+          <div class="img-placeholder w-full h-full"><i data-lucide="image" class="w-8 h-8"></i></div>
+          {% endif %}
+          {% if attraction.is_featured %}<span class="absolute top-3 left-3 featured-badge z-10"><i data-lucide="star" class="w-3 h-3"></i> Featured</span>{% endif %}
+          <span class="absolute bottom-3 right-3 badge-category text-xs font-medium px-2.5 py-1 rounded-full z-10">{{ attraction.get_category_display }}</span>
+        </div>
+        <div class="p-5">
+          <h2 class="font-display font-bold text-tz-dark text-lg leading-snug mb-1 group-hover:text-tz-forest transition-colors">{{ attraction.name }}</h2>
+          <p class="text-tz-muted text-sm mb-3 flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-tz-savanna"></i> {{ attraction.region.name }}
+          </p>
+          <p class="text-tz-dark/70 text-sm line-clamp-2">{{ attraction.short_description }}</p>
+          <div class="mt-4 flex items-center justify-between">
+            <span class="badge-{{ attraction.difficulty_level }} text-xs font-semibold px-2.5 py-1 rounded-full">{{ attraction.get_difficulty_level_display }}</span>
+            {% if attraction.estimated_duration %}<span class="text-tz-muted text-xs flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> {{ attraction.estimated_duration }}</span>{% endif %}
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="state-empty">
+      <div class="state-icon-wrap"><i data-lucide="map-pin" class="w-8 h-8 text-tz-savanna"></i></div>
+      <h3 class="font-display text-xl font-bold text-tz-dark">No attractions found</h3>
+      <p class="text-tz-muted">Try adjusting your filters or <a href="{% url 'web:attraction-list' %}" class="text-tz-forest underline">browse all attractions</a>.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

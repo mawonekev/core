@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ region.meta_title|default:region.name }} — Tanzania Region Guide | Xenohuru{% endblock %}
+{% block meta_description %}{{ region.meta_description|default:region.description|striptags|truncatechars:155 }}{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TouristDestination",
+  "name": "{{ region.name|escapejs }}",
+  "description": "{{ region.description|striptags|truncatechars:300|escapejs }}",
+  "url": "{{ CANONICAL_URL }}",
+  {% if region.image %}"image": "{{ region.image.url }}",{% endif %}
+  "geo": {"@type": "GeoCoordinates", "latitude": "{{ region.latitude }}", "longitude": "{{ region.longitude }}"},
+  "address": {"@type": "PostalAddress", "addressCountry": "TZ", "addressRegion": "{{ region.name|escapejs }}"},
+  "touristType": ["Safari", "Wildlife", "Nature", "Adventure"],
+  "containedInPlace": {"@type": "Country", "name": "Tanzania"},
+  "includesAttraction": [{% for a in attractions|slice:":10" %}{% if not forloop.first %},{% endif %}
+    {"@type": "TouristAttraction", "name": "{{ a.name|escapejs }}", "url": "{{ SITE_URL }}/attractions/{{ a.slug }}"}{% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="relative h-[55vh] min-h-[420px] overflow-hidden">
+  {% if region.image %}
+  <img src="{{ region.image.url }}" alt="{{ region.name }}" class="absolute inset-0 w-full h-full object-cover" loading="eager" />
+  {% else %}
+  <div class="absolute inset-0 bg-gradient-to-br from-tz-forest via-tz-sky to-tz-forest"></div>
+  {% endif %}
+  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+  <div class="absolute inset-0 hero-grain"></div>
+
+  <div class="absolute bottom-0 left-0 right-0 max-w-7xl mx-auto px-4 sm:px-6 pb-10 z-10">
+    <nav class="flex items-center gap-2 text-white/60 text-sm mb-4" aria-label="Breadcrumb">
+      <a href="{% url 'web:region-list' %}" class="flex items-center gap-1.5 hover:text-white transition-colors">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> All Regions
+      </a>
+      <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+      <span class="text-white/90">{{ region.name }}</span>
+    </nav>
+    <h1 class="font-display text-4xl sm:text-5xl font-black text-white mb-3">{{ region.name }}</h1>
+    <div class="flex flex-wrap items-center gap-4 text-white/70 text-sm">
+      <span class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-tz-savanna"></i> Tanzania</span>
+      {% if region.latitude %}<span class="font-mono text-xs">{{ region.latitude }}°N, {{ region.longitude }}°E</span>{% endif %}
+      <span class="flex items-center gap-1.5"><i data-lucide="layout-grid" class="w-4 h-4"></i> {{ attractions.count }} attraction{{ attractions.count|pluralize }}</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="bg-white border-b border-gray-100 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 lg:grid-cols-4 divide-x divide-gray-100">
+      <div class="flex items-center gap-3 py-4 px-4">
+        <i data-lucide="layout-grid" class="w-5 h-5 text-tz-savanna flex-shrink-0"></i>
+        <div><p class="text-xs text-tz-muted">Attractions</p><p class="font-bold text-tz-dark">{{ attractions.count }}</p></div>
+      </div>
+      {% if region.area_sq_km %}
+      <div class="flex items-center gap-3 py-4 px-4">
+        <i data-lucide="mountain" class="w-5 h-5 text-tz-savanna flex-shrink-0"></i>
+        <div><p class="text-xs text-tz-muted">Area</p><p class="font-bold text-tz-dark">{{ region.area_sq_km|floatformat:"0" }} km²</p></div>
+      </div>
+      {% endif %}
+      {% if region.population %}
+      <div class="flex items-center gap-3 py-4 px-4">
+        <i data-lucide="users" class="w-5 h-5 text-tz-savanna flex-shrink-0"></i>
+        <div><p class="text-xs text-tz-muted">Population</p><p class="font-bold text-tz-dark">{{ region.population|floatformat:"0" }}</p></div>
+      </div>
+      {% endif %}
+      <div class="flex items-center gap-3 py-4 px-4">
+        <i data-lucide="tag" class="w-5 h-5 text-tz-savanna flex-shrink-0"></i>
+        <div><p class="text-xs text-tz-muted">Categories</p><p class="font-bold text-tz-dark">{{ categories|length }}</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="lg:grid lg:grid-cols-3 lg:gap-10">
+
+    <!-- MAIN -->
+    <div class="lg:col-span-2 space-y-8">
+
+      <!-- Description -->
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" data-aos="fade-up">
+        <div class="prose prose-lg max-w-none text-tz-dark/80 leading-relaxed [&>h2]:font-display [&>h2]:text-tz-forest [&>h3]:text-tz-forest">
+          {{ region.description|safe }}
+        </div>
+      </div>
+
+      <!-- Attractions in this region -->
+      {% if attractions %}
+      <div data-aos="fade-up">
+        <h2 class="font-display text-2xl font-bold text-tz-dark mb-6 flex items-center gap-2">
+          <i data-lucide="compass" class="w-6 h-6 text-tz-savanna"></i> Attractions in {{ region.name }}
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {% for a in attractions %}
+          <a href="{% url 'web:attraction-detail' a.slug %}" class="attraction-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}50">
+            <div class="relative h-44 overflow-hidden">
+              {% if a.featured_image %}<img src="{{ a.featured_image.url }}" alt="{{ a.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 reveal-image" loading="lazy" />
+              {% else %}<div class="img-placeholder w-full h-full"><i data-lucide="image" class="w-6 h-6"></i></div>{% endif %}
+              <span class="absolute bottom-2 right-2 badge-category text-xs px-2 py-0.5 rounded-full">{{ a.get_category_display }}</span>
+            </div>
+            <div class="p-4">
+              <h3 class="font-display font-bold text-tz-dark group-hover:text-tz-forest transition-colors">{{ a.name }}</h3>
+              <p class="text-tz-muted text-sm mt-1 line-clamp-2">{{ a.short_description }}</p>
+              <div class="mt-3 flex items-center gap-2">
+                <span class="badge-{{ a.difficulty_level }} text-xs font-semibold px-2.5 py-0.5 rounded-full">{{ a.get_difficulty_level_display }}</span>
+                {% if a.estimated_duration %}<span class="text-tz-muted text-xs flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> {{ a.estimated_duration }}</span>{% endif %}
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- GYG Widget -->
+      {% if gyg_location_id %}
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" data-aos="fade-up">
+        <h3 class="font-display text-xl font-bold text-tz-dark mb-2 flex items-center gap-2">
+          <i data-lucide="compass" class="w-5 h-5 text-tz-savanna"></i> Explore Tours in {{ region.name }}
+        </h3>
+        <p class="text-tz-muted text-sm mb-6">Discover guided experiences, safaris, and activities available across {{ region.name }}.</p>
+        <div data-gyg-href="https://widget.getyourguide.com/default/activities.frame"
+             data-gyg-locale-code="en-US"
+             data-gyg-widget="activities"
+             data-gyg-number-of-items="6"
+             data-gyg-partner-id="{{ gyg_partner_id }}"
+             data-gyg-location-id="{{ gyg_location_id }}"
+             data-gyg-cmp="xenohuru_region_{{ region.slug }}">
+        </div>
+        <script async defer src="https://widget.getyourguide.com/dist/pa.umd.production.min.js" referrerpolicy="strict-origin-when-cross-origin"></script>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="mt-10 lg:mt-0 space-y-6 sticky-sidebar">
+      <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-left">
+        <h3 class="font-semibold text-tz-dark mb-4 text-sm uppercase tracking-wider">Region Info</h3>
+        <table class="key-info-table w-full text-sm">
+          <tbody class="divide-y divide-gray-50">
+            <tr><td class="py-2.5 text-tz-muted pr-4">Country</td><td class="py-2.5 font-medium">Tanzania</td></tr>
+            {% if region.latitude %}<tr><td class="py-2.5 text-tz-muted pr-4">Coordinates</td><td class="py-2.5 font-mono text-xs">{{ region.latitude }}, {{ region.longitude }}</td></tr>{% endif %}
+            {% if region.area_sq_km %}<tr><td class="py-2.5 text-tz-muted pr-4">Area</td><td class="py-2.5 font-medium">{{ region.area_sq_km|floatformat:"0" }} km²</td></tr>{% endif %}
+            {% if region.population %}<tr><td class="py-2.5 text-tz-muted pr-4">Population</td><td class="py-2.5 font-medium">{{ region.population|floatformat:"0" }}</td></tr>{% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-tz-forest text-white rounded-2xl p-6" data-aos="fade-left" data-aos-delay="100">
+        <p class="text-white/60 text-xs uppercase tracking-wider mb-2">Browse all</p>
+        <h3 class="font-display text-lg font-bold mb-4">Other Regions</h3>
+        <a href="{% url 'web:region-list' %}" class="inline-flex items-center gap-1.5 text-tz-savanna text-sm font-semibold">
+          View all regions <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <!-- Map card -->
+      <div class="bg-white rounded-2xl shadow-sm overflow-hidden" data-aos="fade-left" data-aos-delay="150">
+        <div class="px-4 pt-4 pb-2 flex items-center justify-between">
+          <p class="text-xs font-semibold text-tz-dark uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="map" class="w-3.5 h-3.5 text-tz-savanna"></i> Map
+          </p>
+          <a href="https://maps.google.com/?q={{ region.name }}+Region,+Tanzania"
+             target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-1 text-xs font-semibold text-tz-sky hover:underline">
+            <i data-lucide="external-link" class="w-3 h-3"></i> Open full map
+          </a>
+        </div>
+        {% if google_maps_api_key and not boundary_json %}
+        <iframe
+          src="https://www.google.com/maps/embed/v1/place?key={{ google_maps_api_key }}&q={{ region.name }}+Region,+Tanzania&zoom=8&maptype=roadmap"
+          width="100%" height="260" style="border:0;display:block" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen>
+        </iframe>
+        {% else %}
+        <div id="region-map" class="h-64 w-full z-0"></div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% if not google_maps_api_key or boundary_json %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9/dist/leaflet.css" />
+{% endblock %}
+{% endif %}
+
+{% block extra_js %}
+{% if not google_maps_api_key or boundary_json %}
+<script src="https://unpkg.com/leaflet@1.9/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const mapEl = document.getElementById('region-map');
+  if (!mapEl) return;
+  const map = L.map('region-map', { scrollWheelZoom: false, zoomControl: true });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    maxZoom: 19,
+  }).addTo(map);
+  const bounds = [];
+  {% if boundary_json %}
+  try {
+    const raw = {{ boundary_json|safe }};
+    const geoInput = (raw.type === 'Feature' || raw.type === 'FeatureCollection') ? raw : { type: 'Feature', geometry: raw };
+    const bl = L.geoJSON(geoInput, { style: { color: '#C8903A', weight: 2.5, fillColor: '#C8903A', fillOpacity: 0.10 } }).addTo(map);
+    bl.eachLayer(l => l.bindTooltip('{{ region.name|escapejs }}', { sticky: true }));
+    if (bl.getBounds().isValid()) bounds.push(bl.getBounds().getNorthEast(), bl.getBounds().getSouthWest());
+  } catch(e) {}
+  {% endif %}
+  {% for a in attractions %}{% if a.latitude and a.longitude %}
+  (function(){
+    var url = '{% url "web:attraction-detail" a.slug %}';
+    var marker = L.circleMarker([{{ a.latitude }}, {{ a.longitude }}], {
+      radius: 8, color: '#fff', fillColor: '#1A4731', fillOpacity: 1, weight: 2,
+      bubblingMouseEvents: false
+    });
+    marker.bindPopup(
+      '<div style="min-width:140px">' +
+      '<p style="font-weight:700;color:#1A4731;margin:0 0 6px">{{ a.name|escapejs }}</p>' +
+      '{% if a.short_description %}<p style="font-size:12px;color:#555;margin:0 0 8px">{{ a.short_description|truncatechars:60|escapejs }}</p>{% endif %}' +
+      '<a href="' + url + '" target="_blank" rel="noopener" ' +
+      'style="display:inline-block;background:#1A4731;color:#fff;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;text-decoration:none">' +
+      'View details ↗</a></div>'
+    );
+    marker.on('click', function(){ marker.openPopup(); });
+    marker.addTo(map);
+  })();
+  bounds.push([{{ a.latitude }}, {{ a.longitude }}]);
+  {% endif %}{% endfor %}
+  if (bounds.length) map.fitBounds(bounds, { padding: [24, 24], maxZoom: 11 });
+  else map.setView([{% if region.latitude %}{{ region.latitude }}, {{ region.longitude }}{% else %}-6.369, 34.888{% endif %}], 9);
+});
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tanzania Weather — Live Conditions & Forecast | Xenohuru{% endblock %}
+{% block meta_description %}Live weather conditions and 7-day forecast for Tanzania's top destinations — Serengeti, Kilimanjaro, Zanzibar, and more.{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Tanzania Weather — Live Conditions & Forecast",
+  "description": "Live weather conditions and 7-day forecasts for Tanzania's top destinations including Serengeti, Kilimanjaro, Zanzibar, Arusha, and Ngorongoro.",
+  "url": "{{ CANONICAL_URL }}",
+  "about": {"@type": "Country", "name": "Tanzania"},
+  "provider": {"@type": "Organization", "name": "Xenohuru", "url": "{{ SITE_URL }}"}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div x-data="{
+  locations: [
+    {% for r in regions %}
+    { label: '{{ r.name }}', lat: '{{ r.latitude|default:'' }}', lng: '{{ r.longitude|default:'' }}' },
+    {% endfor %}
+    { label: 'Serengeti National Park', lat: '-2.3333', lng: '34.8333' },
+    { label: 'Mount Kilimanjaro', lat: '-3.0674', lng: '37.3556' },
+    { label: 'Zanzibar (Stone Town)', lat: '-6.1622', lng: '39.1921' },
+    { label: 'Ngorongoro Crater', lat: '-3.2461', lng: '35.5883' },
+    { label: 'Dar es Salaam', lat: '-6.7924', lng: '39.2083' },
+    { label: 'Arusha', lat: '-3.3869', lng: '36.6822' },
+    { label: 'Tarangire NP', lat: '-3.8333', lng: '35.8333' },
+    { label: 'Pemba Island', lat: '-5.1167', lng: '39.7833' }
+  ].filter(l => l.lat),
+  selected: 0,
+  current: null,
+  forecast: [],
+  loading: false,
+  async load() {
+    const loc = this.locations[this.selected];
+    if (!loc || !loc.lat) return;
+    this.loading = true;
+    this.current = null;
+    this.forecast = [];
+    try {
+      const [cRes, fRes] = await Promise.all([
+        fetch(`/api/v1/weather/current/?lat=${loc.lat}&lng=${loc.lng}`),
+        fetch(`/api/v1/weather/forecast/?lat=${loc.lat}&lng=${loc.lng}`)
+      ]);
+      if (cRes.ok) this.current = await cRes.json();
+      if (fRes.ok) {
+        const fd = await fRes.json();
+        if (fd.dates) {
+          this.forecast = fd.dates.slice(0,7).map((d,i) => ({
+            date: d, max: Math.round(fd.temperature_max?.[i] || 0),
+            desc: fd.weather_descriptions?.[i] || ''
+          }));
+        } else if (Array.isArray(fd)) {
+          this.forecast = fd.slice(0,7).map(d => ({
+            date: d.date||'', max: Math.round(d.temperature_max||d.temperature||0),
+            desc: d.weather_description||d.condition||''
+          }));
+        }
+      }
+    } catch(e) { console.error(e); }
+    this.loading = false;
+  },
+  getTemp() { return this.current ? Math.round(this.current.temperature||0) : null; },
+  getFeels() { return this.current ? Math.round(this.current.apparent_temperature||this.current.feels_like||this.current.temperature||0) : null; },
+  getDesc() { return this.current?.weather_description || this.current?.condition || 'Clear'; },
+  getHumidity() { return this.current?.humidity; },
+  getWind() { const w = this.current?.wind_speed||this.current?.windspeed; return w != null ? Math.round(w) : null; },
+  getVis() { return this.current?.visibility; },
+  getDayLabel(dateStr, idx) {
+    if (idx === 0) return 'Today';
+    if (!dateStr) return `Day ${idx+1}`;
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en', {weekday:'short'});
+  },
+  getWeatherIcon(desc) {
+    const d = (desc||'').toLowerCase();
+    if (d.includes('rain')||d.includes('shower')) return 'cloud-rain';
+    if (d.includes('cloud')||d.includes('overcast')) return 'cloud';
+    if (d.includes('snow')||d.includes('frost')) return 'cloud-snow';
+    return 'sun';
+  }
+}" x-init="load()">
+
+<!-- HERO / SELECTOR -->
+<section class="bg-tz-savanna pt-32 pb-6 px-4">
+  <div class="max-w-4xl mx-auto">
+    <p class="text-xs font-mono tracking-widest text-white/60 uppercase mb-1">Live Weather</p>
+    <h1 class="font-display text-3xl font-black text-white mb-5">Tanzania Weather</h1>
+    <div class="relative inline-block w-full sm:w-auto">
+      <i data-lucide="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tz-savanna pointer-events-none z-10"></i>
+      <select x-model="selected" @change="load()" class="appearance-none pl-9 pr-10 py-2.5 bg-white rounded-xl text-tz-dark font-semibold text-sm w-full sm:w-80 focus:outline-none cursor-pointer border-0">
+        <template x-for="(loc, i) in locations" :key="i">
+          <option :value="i" x-text="loc.label"></option>
+        </template>
+      </select>
+      <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tz-muted pointer-events-none"></i>
+    </div>
+  </div>
+</section>
+
+<!-- CURRENT WEATHER -->
+<section class="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
+  <!-- Loading -->
+  <div x-show="loading" class="h-44 bg-white rounded-2xl border border-gray-100 animate-pulse shadow-sm"></div>
+
+  <!-- Loaded -->
+  <div x-show="!loading && current" x-cloak class="bg-gradient-to-br from-tz-savanna to-amber-700 rounded-2xl p-7 text-white shadow-md">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <p class="text-white/60 text-sm mb-1" x-text="locations[selected]?.label"></p>
+        <div class="flex items-end gap-2">
+          <span class="text-7xl font-black font-display leading-none" x-text="(getTemp() != null ? getTemp() : '--') + '°'"></span>
+          <span class="text-xl text-white/60 mb-2">C</span>
+        </div>
+        <p class="text-lg text-white/90 capitalize mt-1" x-text="getDesc()"></p>
+        <p class="text-sm text-white/60 mt-0.5" x-show="getFeels() !== getTemp()">Feels like <span x-text="getFeels()"></span>°C</p>
+      </div>
+      <div class="opacity-90 text-white/80">
+        <template x-if="getWeatherIcon(getDesc()) === 'cloud-rain'"><i data-lucide="cloud-rain" class="w-16 h-16 text-blue-200"></i></template>
+        <template x-if="getWeatherIcon(getDesc()) === 'cloud'"><i data-lucide="cloud" class="w-16 h-16 text-white/70"></i></template>
+        <template x-if="getWeatherIcon(getDesc()) === 'cloud-snow'"><i data-lucide="cloud-snow" class="w-16 h-16 text-blue-100"></i></template>
+        <template x-if="getWeatherIcon(getDesc()) === 'sun'"><i data-lucide="sun" class="w-16 h-16 text-yellow-300"></i></template>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-4 mt-5 pt-5 border-t border-white/20 text-sm">
+      <div class="flex items-center gap-2">
+        <i data-lucide="droplets" class="w-4 h-4 text-white/50 flex-shrink-0"></i>
+        <div><p class="text-white/50 text-xs">Humidity</p><p class="font-bold" x-text="getHumidity() != null ? getHumidity() + '%' : '—'"></p></div>
+      </div>
+      <div class="flex items-center gap-2">
+        <i data-lucide="wind" class="w-4 h-4 text-white/50 flex-shrink-0"></i>
+        <div><p class="text-white/50 text-xs">Wind</p><p class="font-bold" x-text="getWind() != null ? getWind() + ' km/h' : '—'"></p></div>
+      </div>
+      <div class="flex items-center gap-2">
+        <i data-lucide="eye" class="w-4 h-4 text-white/50 flex-shrink-0"></i>
+        <div><p class="text-white/50 text-xs">Visibility</p><p class="font-bold" x-text="getVis() != null ? getVis() + ' km' : '—'"></p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error / no data -->
+  <div x-show="!loading && !current" x-cloak class="bg-white border border-gray-100 rounded-2xl p-8 text-center text-tz-muted shadow-sm">
+    Weather data unavailable for this location.
+  </div>
+</section>
+
+<!-- 7-DAY FORECAST -->
+<section class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+  <h2 class="text-sm font-bold uppercase tracking-wide text-tz-muted mb-4">7-Day Forecast</h2>
+
+  <!-- Loading skeletons -->
+  <div x-show="loading" class="grid grid-cols-4 sm:grid-cols-7 gap-2">
+    <template x-for="i in 7" :key="i"><div class="h-24 bg-white border border-gray-100 rounded-xl animate-pulse"></div></template>
+  </div>
+
+  <!-- Forecast cards -->
+  <div x-show="!loading && forecast.length > 0" x-cloak class="grid grid-cols-4 sm:grid-cols-7 gap-2">
+    <template x-for="(d, i) in forecast" :key="i">
+      <div class="bg-white border border-gray-100 rounded-xl p-3 text-center shadow-sm">
+        <p class="text-xs font-semibold text-tz-muted mb-2" x-text="getDayLabel(d.date, i)"></p>
+        <div class="flex justify-center mb-1">
+          <template x-if="getWeatherIcon(d.desc) === 'cloud-rain'"><i data-lucide="cloud-rain" class="w-5 h-5 text-blue-400"></i></template>
+          <template x-if="getWeatherIcon(d.desc) === 'cloud'"><i data-lucide="cloud" class="w-5 h-5 text-gray-400"></i></template>
+          <template x-if="getWeatherIcon(d.desc) === 'cloud-snow'"><i data-lucide="cloud-snow" class="w-5 h-5 text-blue-200"></i></template>
+          <template x-if="getWeatherIcon(d.desc) === 'sun'"><i data-lucide="sun" class="w-5 h-5 text-amber-400"></i></template>
+        </div>
+        <p class="font-bold text-tz-dark text-sm" x-text="d.max + '°C'"></p>
+      </div>
+    </template>
+  </div>
+
+  <p x-show="!loading && forecast.length === 0" x-cloak class="text-sm text-tz-muted">Forecast not available for this location.</p>
+</section>
+
+<!-- SEASONS GUIDE -->
+<section class="bg-white border-t border-gray-100 py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="font-display text-xl font-bold text-tz-dark mb-1">Tanzania Seasons Guide</h2>
+    <p class="text-sm text-tz-muted mb-6">Plan around Tanzania's two rainy and two dry seasons.</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="border border-gray-100 rounded-xl p-4 bg-tz-light">
+        <p class="text-xs font-mono font-bold text-tz-savanna mb-1">Dec – Mar</p>
+        <p class="font-semibold text-tz-dark mb-1">Short Dry + Short Rains</p>
+        <p class="text-sm text-tz-muted">Warm and increasingly humid. Good wildlife viewing near water sources.</p>
+      </div>
+      <div class="border border-gray-100 rounded-xl p-4 bg-tz-light">
+        <p class="text-xs font-mono font-bold text-tz-savanna mb-1">Apr – May</p>
+        <p class="font-semibold text-tz-dark mb-1">Long Rains (Masika)</p>
+        <p class="text-sm text-tz-muted">Heavy rains, lush landscapes. Some roads difficult. Lower tourist prices.</p>
+      </div>
+      <div class="border border-gray-100 rounded-xl p-4 bg-tz-light">
+        <p class="text-xs font-mono font-bold text-tz-savanna mb-1">Jun – Oct</p>
+        <p class="font-semibold text-tz-dark mb-1">Long Dry Season (Kiangazi)</p>
+        <p class="text-sm text-tz-muted">Best wildlife viewing. Cool and dry. Peak safari season.</p>
+      </div>
+      <div class="border border-gray-100 rounded-xl p-4 bg-tz-light">
+        <p class="text-xs font-mono font-bold text-tz-savanna mb-1">Nov</p>
+        <p class="font-semibold text-tz-dark mb-1">Short Rains (Mvua Ndogo)</p>
+        <p class="text-sm text-tz-muted">Brief showers, fewer crowds. Green scenery starts returning.</p>
+      </div>
+    </div>
+    <p class="text-xs text-tz-muted mt-5">Data source: <a href="https://meteo.go.tz" target="_blank" rel="noopener noreferrer" class="text-tz-savanna hover:underline">Tanzania Meteorological Authority (TMA)</a>. Forecasts are indicative — always verify before travel.</p>
+  </div>
+</section>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

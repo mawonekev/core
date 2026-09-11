@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tanzania Travel Blog — Guides, Tips & Insights | Xenohuru{% endblock %}
+{% block meta_description %}In-depth Tanzania travel guides — best time to visit, climbing Kilimanjaro, Serengeti safari tips, Zanzibar islands and more.{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Blog","name":"Xenohuru Tanzania Travel Blog","description":"In-depth Tanzania travel guides — best time to visit, Kilimanjaro, Serengeti safari tips, Zanzibar and more.","url":"{{ request.build_absolute_uri }}","inLanguage":"en","publisher":{"@type":"Organization","name":"Xenohuru","url":"{{ request.scheme }}://{{ request.get_host }}"},"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ request.scheme }}://{{ request.get_host }}"},{"@type":"ListItem","position":2,"name":"Blog","item":"{{ request.build_absolute_uri }}"}]}}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="relative pt-32 pb-16 bg-tz-dark hero-grain overflow-hidden">
+  <div class="absolute inset-0 dot-pattern opacity-10"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 text-white text-center">
+    <p class="text-tz-savanna text-xs font-mono tracking-[0.2em] uppercase mb-3">Tanzania Travel Insights</p>
+    <h1 class="font-display text-5xl font-black mb-4">From the Blog</h1>
+    <p class="text-white/70 text-lg max-w-xl mx-auto">Expert guides, seasonal tips, and stories from Tanzania's greatest destinations.</p>
+  </div>
+</section>
+
+<section class="py-16 bg-tz-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if articles %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for article in articles %}
+      <a href="{% url 'web:blog-detail' article.slug %}" class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}75">
+        {% if article.featured_image %}
+        <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="blog-card-img transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        {% else %}
+        <div class="blog-card-img bg-tz-sand flex items-center justify-center"><i data-lucide="newspaper" class="w-10 h-10 text-tz-earth/40"></i></div>
+        {% endif %}
+        <div class="p-6">
+          <p class="text-tz-muted text-xs mb-3 flex items-center gap-2">
+            <i data-lucide="calendar" class="w-3.5 h-3.5"></i> {{ article.published_at|date:"N j, Y" }}
+            {% if article.author %} · <span>{{ article.author.get_full_name|default:article.author.username }}</span>{% endif %}
+          </p>
+          <h2 class="font-display font-bold text-tz-dark text-lg leading-snug mb-2 group-hover:text-tz-forest transition-colors">{{ article.title }}</h2>
+          <p class="text-tz-muted text-sm line-clamp-3">{{ article.excerpt }}</p>
+          <span class="inline-flex items-center gap-1 text-tz-forest text-sm font-semibold mt-4 group-hover:text-tz-savanna transition-colors">Read more <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="state-empty">
+      <div class="state-icon-wrap"><i data-lucide="newspaper" class="w-8 h-8 text-tz-savanna"></i></div>
+      <p class="text-tz-muted">No articles published yet.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

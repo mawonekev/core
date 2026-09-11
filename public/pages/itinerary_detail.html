@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ itinerary.title }} | Tanzania Itineraries | Xenohuru{% endblock %}
+{% block meta_description %}{{ itinerary.description|striptags|truncatechars:155 }}{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TouristTrip",
+  "name": "{{ itinerary.title|escapejs }}",
+  "description": "{{ itinerary.description|striptags|truncatechars:300|escapejs }}",
+  "url": "{{ CANONICAL_URL }}",
+  "touristType": ["Adventure", "Wildlife", "Nature"],
+  "itinerary": {"@type": "ItemList", "numberOfItems": {{ itinerary.days.count }}},
+  "provider": {"@type": "Organization", "name": "Xenohuru", "url": "{{ SITE_URL }}"}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="relative pt-32 pb-16 {% if itinerary.featured_image %}overflow-hidden{% else %}bg-tz-dark{% endif %}">
+  {% if itinerary.featured_image %}
+  <img src="{{ itinerary.featured_image.url }}" alt="{{ itinerary.title }}" class="absolute inset-0 w-full h-full object-cover" loading="eager" />
+  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30"></div>
+  {% endif %}
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-white">
+    <nav class="flex items-center gap-2 text-white/60 text-sm mb-6" aria-label="Breadcrumb">
+      <a href="{% url 'web:itineraries' %}" class="hover:text-white transition-colors flex items-center gap-1.5">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Itineraries
+      </a>
+    </nav>
+    <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black leading-tight mb-4">{{ itinerary.title }}</h1>
+    <div class="flex flex-wrap items-center gap-4 text-white/70 text-sm">
+      {% if itinerary.duration_days %}
+      <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-4 h-4"></i> {{ itinerary.duration_days }} days</span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- Overview -->
+  <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-10 mb-16" data-aos="fade-up">
+    <div class="prose prose-lg max-w-none text-tz-dark/85 leading-relaxed">
+      {{ itinerary.description|safe }}
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  {% if itinerary.days.all %}
+  <div class="mb-16">
+    <div class="text-center mb-12" data-aos="fade-up">
+      <p class="text-xs font-mono tracking-widest text-tz-savanna uppercase mb-2">Route Plan</p>
+      <h2 class="font-display text-3xl font-bold text-tz-dark">Day-by-Day Journey</h2>
+    </div>
+
+    <div class="relative">
+      <!-- Vertical center line — desktop only -->
+      <div class="absolute left-1/2 top-0 bottom-0 w-px bg-tz-sand hidden md:block" aria-hidden="true"></div>
+
+      {% for day in itinerary.days.all %}
+      <!-- Row: alternates right/left on desktop, stacks on mobile -->
+      <div class="relative flex flex-col md:flex-row md:items-start mb-10 md:mb-14
+                  {% if forloop.counter|divisibleby:2 %}md:flex-row-reverse{% endif %}"
+           data-aos="{% if forloop.counter|divisibleby:2 %}fade-right{% else %}fade-left{% endif %}">
+
+        <!-- Day bubble — sits on the center line (desktop) -->
+        <div class="hidden md:flex absolute left-1/2 top-6 -translate-x-1/2 z-10
+                    w-11 h-11 rounded-full bg-tz-savanna border-4 border-white shadow-lg
+                    items-center justify-center">
+          <span class="text-white text-sm font-black">{{ day.day_number }}</span>
+        </div>
+
+        <!-- Spacer — pushes card to correct side on desktop -->
+        <div class="hidden md:block md:w-1/2"></div>
+
+        <!-- Card -->
+        <div class="w-full md:w-1/2
+                    {% if forloop.counter|divisibleby:2 %}md:pr-14{% else %}md:pl-14{% endif %}">
+
+          <!-- Mobile: day pill above card -->
+          <div class="flex items-center gap-2 mb-3 md:hidden">
+            <span class="w-8 h-8 rounded-full bg-tz-savanna text-white text-xs font-bold flex items-center justify-center flex-shrink-0">{{ day.day_number }}</span>
+            <span class="text-xs font-mono text-tz-savanna uppercase tracking-wider">Day {{ day.day_number }}</span>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md hover:border-tz-sand transition-all">
+            <!-- Day label — desktop -->
+            <p class="hidden md:block text-xs font-mono text-tz-savanna uppercase tracking-wider mb-2">Day {{ day.day_number }}</p>
+            <h3 class="font-display font-bold text-tz-dark text-lg mb-3 leading-snug">{{ day.title }}</h3>
+            {% if day.description %}
+            <div class="prose prose-sm max-w-none text-tz-dark/75 leading-relaxed">{{ day.description|safe }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Connector line to center — desktop, hidden on last item -->
+          {% if not forloop.last %}
+          <div class="hidden md:block absolute left-1/2 {% if forloop.counter|divisibleby:2 %}-translate-x-full{% else %}translate-x-0{% endif %} top-11 h-px w-14 bg-tz-sand/80" aria-hidden="true"></div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+      <!-- End node -->
+      <div class="relative flex justify-center mt-4" data-aos="fade-up">
+        <div class="w-6 h-6 rounded-full bg-tz-forest border-4 border-white shadow-md hidden md:block"></div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Featured Attractions -->
+  {% if itinerary.featured_attractions.all %}
+  <section class="mt-4" aria-labelledby="key-attractions-heading">
+    <div class="mb-8" data-aos="fade-up">
+      <p class="text-xs font-mono tracking-widest text-tz-savanna uppercase mb-2">Key Stops</p>
+      <h2 id="key-attractions-heading" class="font-display text-2xl font-bold text-tz-dark">Attractions on This Route</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      {% for a in itinerary.featured_attractions.all %}
+      <a href="{% url 'web:attraction-detail' a.slug %}" class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}50">
+        <div class="relative h-44 overflow-hidden">
+          {% if a.featured_image %}
+          <img src="{{ a.featured_image.url }}" alt="{{ a.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+          {% else %}
+          <div class="w-full h-full bg-tz-sand flex items-center justify-center"><i data-lucide="image" class="w-6 h-6 text-tz-earth/40"></i></div>
+          {% endif %}
+        </div>
+        <div class="p-4">
+          <h3 class="font-display font-bold text-tz-dark group-hover:text-tz-forest transition-colors">{{ a.name }}</h3>
+          <p class="text-tz-muted text-sm mt-1 line-clamp-2">{{ a.short_description }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+</div>
+
+<!-- CTA -->
+<section class="bg-tz-savanna py-12 px-4 text-center cta-pattern">
+  <h2 class="font-display text-2xl font-bold text-white mb-2">Plan Your Tanzania Trip</h2>
+  <p class="text-white/75 text-sm max-w-sm mx-auto mb-6">Explore all destinations and attractions across Tanzania.</p>
+  <a href="{% url 'web:attraction-list' %}" class="inline-flex items-center gap-2 bg-white text-tz-savanna font-bold px-6 py-3 rounded-xl hover:bg-amber-50 transition-colors text-sm">
+    Browse Attractions <i data-lucide="arrow-right" class="w-4 h-4"></i>
+  </a>
+</section>
+
+{% endblock %}

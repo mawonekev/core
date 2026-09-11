@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Search Tanzania — Attractions, Regions & Guides | Xenohuru{% endblock %}
+{% block meta_description %}Search across Tanzania's attractions, regions, and travel guides on Xenohuru.{% endblock %}
+{% block robots %}noindex, follow{% endblock %}
+
+{% block content %}
+<div x-data="{ tab: '{% if attractions and not articles %}attractions{% elif articles and not attractions %}blog{% else %}all{% endif %}' }">
+
+<!-- SEARCH HERO -->
+<section class="bg-tz-savanna pt-32 pb-10 px-4">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="font-display text-3xl sm:text-4xl font-black text-white mb-6 text-center">Search Tanzania</h1>
+    <form method="GET" action="{% url 'web:search' %}" class="flex gap-2">
+      <div class="flex-1 relative">
+        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-tz-muted"></i>
+        <input
+          autofocus
+          type="search"
+          name="q"
+          value="{{ q|default:'' }}"
+          placeholder="Attractions, regions, guides…"
+          class="w-full pl-11 pr-4 py-3.5 rounded-xl border-0 text-base focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg"
+        />
+      </div>
+      <button type="submit" class="bg-tz-forest text-white font-bold px-5 py-3 rounded-xl hover:bg-tz-forest/90 transition-colors whitespace-nowrap text-sm">Search</button>
+    </form>
+  </div>
+</section>
+
+<!-- TABS -->
+<div class="sticky top-0 z-30 bg-white border-b border-gray-100 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex overflow-x-auto gap-1">
+      <button @click="tab='all'" :class="tab==='all' ? 'border-tz-savanna text-tz-savanna' : 'border-transparent text-tz-muted hover:text-tz-dark'" class="flex-shrink-0 flex items-center gap-1.5 px-4 py-3.5 text-sm font-medium border-b-2 transition-all">
+        <i data-lucide="compass" class="w-3.5 h-3.5"></i> All ({{ total }})
+      </button>
+      <button @click="tab='attractions'" :class="tab==='attractions' ? 'border-tz-savanna text-tz-savanna' : 'border-transparent text-tz-muted hover:text-tz-dark'" class="flex-shrink-0 flex items-center gap-1.5 px-4 py-3.5 text-sm font-medium border-b-2 transition-all">
+        <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Attractions ({{ attractions|length }})
+      </button>
+      <button @click="tab='blog'" :class="tab==='blog' ? 'border-tz-savanna text-tz-savanna' : 'border-transparent text-tz-muted hover:text-tz-dark'" class="flex-shrink-0 flex items-center gap-1.5 px-4 py-3.5 text-sm font-medium border-b-2 transition-all">
+        <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Articles ({{ articles|length }})
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  {% if not q %}
+  <div class="text-center py-20">
+    <i data-lucide="search" class="w-10 h-10 text-gray-200 mx-auto mb-3"></i>
+    <p class="font-medium text-tz-dark mb-1">What are you looking for?</p>
+    <p class="text-sm text-tz-muted">Try searching for "Kilimanjaro", "Serengeti", or "Zanzibar".</p>
+  </div>
+
+  {% elif total == 0 %}
+  <div class="text-center py-20">
+    <i data-lucide="search" class="w-10 h-10 text-gray-200 mx-auto mb-3"></i>
+    <p class="font-medium text-tz-dark mb-1">No results found</p>
+    <p class="text-sm text-tz-muted">Nothing matched "{{ q }}" — try a different term.</p>
+  </div>
+
+  {% else %}
+  <div class="space-y-12">
+
+    <!-- Attractions -->
+    {% if attractions %}
+    <div x-show="tab === 'all' || tab === 'attractions'">
+      <h2 class="text-lg font-bold text-tz-dark mb-4 flex items-center gap-2" x-show="tab === 'all'">
+        <i data-lucide="map-pin" class="w-4 h-4 text-tz-savanna"></i> Attractions
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for a in attractions %}
+        <a href="{% url 'web:attraction-detail' a.slug %}" class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow" data-aos="fade-up">
+          <div class="relative h-40 overflow-hidden">
+            {% if a.featured_image %}<img src="{{ a.featured_image.url }}" alt="{{ a.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+            {% else %}<div class="w-full h-full bg-tz-sand flex items-center justify-center"><i data-lucide="image" class="w-6 h-6 text-tz-earth/40"></i></div>{% endif %}
+            <span class="absolute bottom-2 right-2 badge-category text-xs px-2 py-0.5 rounded-full">{{ a.get_category_display }}</span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-display font-bold text-tz-dark group-hover:text-tz-forest transition-colors text-sm">{{ a.name }}</h3>
+            <p class="text-tz-muted text-xs mt-1 line-clamp-2">{{ a.short_description }}</p>
+            {% if a.region %}<p class="text-xs text-tz-muted mt-2 flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> {{ a.region.name }}</p>{% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Articles -->
+    {% if articles %}
+    <div x-show="tab === 'all' || tab === 'blog'">
+      <h2 class="text-lg font-bold text-tz-dark mb-4 flex items-center gap-2" x-show="tab === 'all'">
+        <i data-lucide="book-open" class="w-4 h-4 text-tz-savanna"></i> Articles
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for a in articles %}
+        <a href="{% url 'web:blog-detail' a.slug %}" class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow" data-aos="fade-up">
+          {% if a.featured_image %}<img src="{{ a.featured_image.url }}" alt="{{ a.title }}" class="blog-card-img transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          {% else %}<div class="blog-card-img bg-tz-sand flex items-center justify-center"><i data-lucide="newspaper" class="w-8 h-8 text-tz-earth/40"></i></div>{% endif %}
+          <div class="p-5">
+            <p class="text-tz-muted text-xs mb-2 flex items-center gap-1.5"><i data-lucide="calendar" class="w-3 h-3"></i> {{ a.published_at|date:"N j, Y" }}</p>
+            <h3 class="font-display font-bold text-tz-dark group-hover:text-tz-forest transition-colors line-clamp-2">{{ a.title }}</h3>
+            <p class="text-tz-muted text-sm mt-1 line-clamp-2">{{ a.excerpt }}</p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+  {% endif %}
+</div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

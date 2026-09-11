@@ -1,0 +1,588 @@
+{% extends "base.html" %}
+{% load static web_extras %}
+
+{% block title %}{{ attraction.meta_title|default:attraction.name }} — Xenohuru{% endblock %}
+{% block meta_description %}{{ attraction.meta_description|default:attraction.short_description }}{% endblock %}
+{% block og_title %}{{ attraction.name }} — Xenohuru{% endblock %}
+{% block og_description %}{{ attraction.short_description }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% if attraction.featured_image %}{% block og_image %}{{ attraction.featured_image.url }}{% endblock %}{% endif %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TouristAttraction",
+  "name": "{{ attraction.name|escapejs }}",
+  "description": "{{ attraction.short_description|escapejs }}",
+  "url": "{{ CANONICAL_URL }}",
+  {% if attraction.featured_image %}"image": "{{ attraction.featured_image.url }}",{% endif %}
+  "geo": {"@type": "GeoCoordinates", "latitude": "{{ attraction.latitude }}", "longitude": "{{ attraction.longitude }}"},
+  "address": {"@type": "PostalAddress", "addressCountry": "TZ", "addressRegion": "{{ attraction.region.name|escapejs }}"},
+  "touristType": ["Wildlife", "Nature", "Safari", "Adventure"],
+  "isLocatedIn": {"@type": "Place", "name": "{{ attraction.region.name|escapejs }}, Tanzania"},
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "{{ SITE_URL }}"},
+      {"@type": "ListItem", "position": 2, "name": "Attractions", "item": "{{ SITE_URL }}/attractions"},
+      {"@type": "ListItem", "position": 3, "name": "{{ attraction.name|escapejs }}", "item": "{{ CANONICAL_URL }}"}
+    ]
+  }
+}
+</script>
+{% if attraction.tips.all %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [{% for tip in attraction.tips.all %}{% if not forloop.first %},{% endif %}
+    {"@type": "Question", "name": "{{ tip.title|escapejs }}", "acceptedAnswer": {"@type": "Answer", "text": "{{ tip.description|striptags|escapejs }}"}}{% endfor %}
+  ]
+}
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO GALLERY -->
+<section class="relative h-[70vh] min-h-[500px] overflow-hidden" aria-label="{{ attraction.name }} gallery">
+  {% if attraction.images.all %}
+  <div class="splide h-full" id="gallery-splide" aria-label="{{ attraction.name }} photos">
+    <div class="splide__track h-full">
+      <ul class="splide__list h-full">
+        {% for img in attraction.images.all %}
+        <li class="splide__slide relative h-full">
+          <img src="{{ img.image.url }}" alt="{{ img.caption|default:attraction.name }}" class="absolute inset-0 w-full h-full object-cover" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% elif attraction.featured_image %}
+  <img src="{{ attraction.featured_image.url }}" alt="{{ attraction.name }}" class="absolute inset-0 w-full h-full object-cover" loading="eager" />
+  {% else %}
+  <div class="absolute inset-0 bg-gradient-to-br from-tz-forest to-tz-sky"></div>
+  {% endif %}
+
+  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10"></div>
+
+  <!-- Breadcrumb -->
+  <nav class="absolute top-24 left-0 right-0 z-20 max-w-7xl mx-auto px-4 sm:px-6" aria-label="Breadcrumb">
+    <ol class="flex items-center gap-2 text-white/70 text-sm">
+      <li><a href="{% url 'web:home' %}" class="hover:text-white transition-colors">Home</a></li>
+      <li><i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></li>
+      <li><a href="{% url 'web:attraction-list' %}" class="hover:text-white transition-colors">Attractions</a></li>
+      <li><i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></li>
+      <li class="text-white/90 truncate max-w-[200px]">{{ attraction.name }}</li>
+    </ol>
+  </nav>
+
+  <!-- Bottom meta -->
+  <div class="absolute bottom-0 left-0 right-0 z-20 max-w-7xl mx-auto px-4 sm:px-6 pb-8">
+    <div class="flex flex-wrap gap-2 mb-3">
+      {% if attraction.is_featured %}<span class="featured-badge"><i data-lucide="star" class="w-3 h-3"></i> Featured</span>{% endif %}
+      {% if attraction.is_free %}<span class="bg-green-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">Free Entry</span>{% endif %}
+      <span class="badge-category text-xs font-medium px-2.5 py-1 rounded-full">{{ attraction.get_category_display }}</span>
+      <span class="badge-{{ attraction.difficulty_level }} text-xs font-semibold px-2.5 py-1 rounded-full">{{ attraction.get_difficulty_level_display }}</span>
+    </div>
+    <h1 class="font-display text-4xl sm:text-5xl font-black text-white leading-tight mb-2">{{ attraction.name }}</h1>
+    <p class="text-white/70 flex flex-wrap items-center gap-4 text-sm">
+      <span class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-tz-savanna"></i> {{ attraction.region.name }}, Tanzania</span>
+      {% if attraction.estimated_duration %}<span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-4 h-4"></i> {{ attraction.estimated_duration }}</span>{% endif %}
+      {% if attraction.altitude %}<span class="flex items-center gap-1.5"><i data-lucide="mountain" class="w-4 h-4"></i> {{ attraction.altitude|floatformat:"0" }}m altitude</span>{% endif %}
+    </p>
+  </div>
+
+  {% if attraction.images.count > 1 %}
+  <div class="gallery-counter"><i data-lucide="camera" class="w-3.5 h-3.5 inline-block mr-1"></i>{{ attraction.images.count }} photos</div>
+  {% endif %}
+</section>
+
+<!-- QUICK META BAR -->
+<div class="bg-white border-b border-gray-100 sticky top-16 lg:top-20 z-30 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 lg:grid-cols-4 divide-x divide-gray-100">
+      <div class="flex items-center gap-3 py-4 px-4">
+        <i data-lucide="dollar-sign" class="w-5 h-5 text-tz-savanna flex-shrink-0"></i>
+        <div>
+          <p class="text-xs text-tz-muted">Entry Fee</p>
+          <p class="text-sm font-semibold text-tz-dark">{% if attraction.is_free %}Free{% elif attraction.price_from %}From ${{ attraction.price_from }}{% else %}See operator{% endif %}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 py-4 px-4">
+        <i data-lucide="calendar" class="w-5 h-5 text-tz-savanna flex-shrink-0"></i>
+        <div>
+          <p class="text-xs text-tz-muted">Best Time</p>
+          <p class="text-sm font-semibold text-tz-dark truncate">{{ attraction.best_time_to_visit|truncatechars:30 }}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 py-4 px-4">
+        <i data-lucide="clock" class="w-5 h-5 text-tz-savanna flex-shrink-0"></i>
+        <div>
+          <p class="text-xs text-tz-muted">Duration</p>
+          <p class="text-sm font-semibold text-tz-dark">{{ attraction.estimated_duration }}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 py-4 px-4">
+        <i data-lucide="plane" class="w-5 h-5 text-tz-savanna flex-shrink-0"></i>
+        <div>
+          <p class="text-xs text-tz-muted">Nearest Airport</p>
+          <p class="text-sm font-semibold text-tz-dark truncate">{{ attraction.nearest_airport|truncatechars:25|default:"See transport" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="lg:grid lg:grid-cols-3 lg:gap-10">
+
+    <!-- LEFT: Main content -->
+    <div class="lg:col-span-2 space-y-10">
+
+
+      <!-- OVERVIEW -->
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" data-aos="fade-up">
+        <h2 class="font-display text-2xl font-bold text-tz-dark mb-6 flex items-center gap-2">
+          <i data-lucide="info" class="w-6 h-6 text-tz-savanna"></i> About {{ attraction.name }}
+        </h2>
+        <div class="prose prose-lg max-w-none text-tz-dark/80 leading-relaxed [&>h2]:font-display [&>h2]:text-tz-forest [&>h3]:text-tz-forest">
+          {{ attraction.description|safe }}
+        </div>
+      </div>
+
+      <!-- ACCESS INFO -->
+      {% if attraction.access_info %}
+      <div class="bg-tz-sand/40 rounded-2xl p-6" data-aos="fade-up">
+        <h3 class="font-display text-xl font-bold text-tz-dark mb-4 flex items-center gap-2">
+          <i data-lucide="navigation" class="w-5 h-5 text-tz-savanna"></i> How to Get Here
+        </h3>
+        <div class="text-tz-dark/80 leading-relaxed">{{ attraction.access_info|safe }}</div>
+      </div>
+      {% endif %}
+
+      <!-- TIPS -->
+      {% if attraction.tips.all %}
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" data-aos="fade-up">
+        <h3 class="font-display text-xl font-bold text-tz-dark mb-6 flex items-center gap-2">
+          <i data-lucide="lightbulb" class="w-5 h-5 text-tz-savanna"></i> Traveller Tips
+        </h3>
+        <ul class="tip-timeline space-y-5 pl-10">
+          {% for tip in attraction.tips.all %}
+          <li class="relative">
+            <span class="absolute -left-10 w-5 h-5 rounded-full bg-tz-forest flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="check" class="w-3 h-3 text-white"></i>
+            </span>
+            <h4 class="font-semibold text-tz-dark mb-1">{{ tip.title }}</h4>
+            <div class="text-tz-muted text-sm">{{ tip.description|safe }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <!-- ENDEMIC SPECIES / WILDLIFE -->
+      {% if attraction.endemic_species.all %}
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" data-aos="fade-up">
+        <h3 class="font-display text-xl font-bold text-tz-dark mb-6 flex items-center gap-2">
+          <i data-lucide="leaf" class="w-5 h-5 text-green-600"></i> Wildlife & Endemic Species
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {% for species in attraction.endemic_species.all %}
+          <div class="flex gap-4 p-4 rounded-xl border border-gray-100 hover:border-tz-sand transition-colors">
+            {% if species.image %}
+            <img src="{{ species.image.url }}" alt="{{ species.common_name }}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0" loading="lazy" />
+            {% else %}
+            <div class="w-16 h-16 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="leaf" class="w-6 h-6 text-green-400"></i>
+            </div>
+            {% endif %}
+            <div class="min-w-0">
+              <p class="font-semibold text-tz-dark text-sm">{{ species.common_name }}</p>
+              {% if species.scientific_name %}<p class="text-tz-muted text-xs italic mb-1">{{ species.scientific_name }}</p>{% endif %}
+              <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded-full
+                {% if species.conservation_status == 'LC' %}bg-green-100 text-green-700
+                {% elif species.conservation_status == 'NT' %}bg-lime-100 text-lime-700
+                {% elif species.conservation_status == 'VU' %}bg-yellow-100 text-yellow-700
+                {% elif species.conservation_status == 'EN' %}bg-orange-100 text-orange-700
+                {% elif species.conservation_status == 'CR' %}bg-red-100 text-red-700
+                {% else %}bg-gray-100 text-gray-700{% endif %}">
+                {{ species.get_conservation_status_display }}
+              </span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- TRANSPORT -->
+      {% if attraction.transport_facilities.all %}
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" data-aos="fade-up">
+        <h3 class="font-display text-xl font-bold text-tz-dark mb-6 flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-5 h-5 text-tz-savanna"></i> Getting There
+        </h3>
+        <div class="space-y-3">
+          {% for t in attraction.transport_facilities.all %}
+          <div class="flex items-start gap-4 p-4 rounded-xl border border-gray-100 {% if t.is_recommended %}border-tz-savanna/30 bg-tz-sand/20{% endif %}">
+            <div class="w-10 h-10 rounded-lg bg-tz-forest/10 flex items-center justify-center flex-shrink-0">
+              {% if t.transport_type == 'airport' %}<i data-lucide="plane" class="w-5 h-5 text-tz-forest"></i>
+              {% elif t.transport_type == 'bus_terminal' %}<i data-lucide="bus" class="w-5 h-5 text-tz-forest"></i>
+              {% elif t.transport_type == 'major_city' %}<i data-lucide="navigation" class="w-5 h-5 text-tz-forest"></i>
+              {% elif t.transport_type == 'port' or t.transport_type == 'ferry' %}<i data-lucide="ship" class="w-5 h-5 text-tz-forest"></i>
+              {% else %}<i data-lucide="car" class="w-5 h-5 text-tz-forest"></i>{% endif %}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <p class="font-semibold text-tz-dark text-sm">{{ t.name }}</p>
+                {% if t.is_recommended %}<span class="text-xs bg-tz-savanna/20 text-tz-earth font-semibold px-2 py-0.5 rounded-full">Recommended</span>{% endif %}
+              </div>
+              <p class="text-tz-muted text-xs mt-0.5">{{ t.get_transport_type_display }} — {{ t.distance_km }} km away{% if t.travel_time_minutes %} · ~{{ t.travel_time_minutes }} min{% endif %}</p>
+              {% if t.description %}<p class="text-tz-dark/70 text-sm mt-1">{{ t.description }}</p>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- CITATIONS -->
+      {% if attraction.citations.all %}
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" data-aos="fade-up">
+        <h3 class="font-display text-xl font-bold text-tz-dark mb-6 flex items-center gap-2">
+          <i data-lucide="book-open" class="w-5 h-5 text-tz-savanna"></i> References & Citations
+        </h3>
+        <ol class="space-y-3">
+          {% for cite in attraction.citations.all %}
+          <li class="flex gap-3 text-sm text-tz-dark/80">
+            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-tz-forest/10 text-tz-forest text-xs font-bold flex items-center justify-center">{{ forloop.counter }}</span>
+            <div>
+              <span class="font-semibold">{{ cite.title }}</span>{% if cite.author %} — {{ cite.author }}{% endif %}{% if cite.year %} ({{ cite.year }}){% endif %}
+              {% if cite.url %} <a href="{{ cite.url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-tz-sky hover:underline ml-1"><i data-lucide="external-link" class="w-3 h-3"></i></a>{% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ol>
+      </div>
+      {% endif %}
+
+      <!-- GYG WIDGET -->
+      {% if gyg_location_id %}
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" data-aos="fade-up">
+        <h3 class="font-display text-xl font-bold text-tz-dark mb-2 flex items-center gap-2">
+          <i data-lucide="compass" class="w-5 h-5 text-tz-savanna"></i> Explore Tours Near {{ attraction.name }}
+        </h3>
+        <p class="text-tz-muted text-sm mb-6">Discover guided experiences, day trips, and activities available in this area.</p>
+        <div data-gyg-href="https://widget.getyourguide.com/default/activities.frame"
+             data-gyg-locale-code="en-US"
+             data-gyg-widget="activities"
+             data-gyg-number-of-items="4"
+             data-gyg-partner-id="{{ gyg_partner_id }}"
+             data-gyg-location-id="{{ gyg_location_id }}"
+             data-gyg-cmp="xenohuru_{{ attraction.slug }}">
+        </div>
+        <script async defer src="https://widget.getyourguide.com/dist/pa.umd.production.min.js" referrerpolicy="strict-origin-when-cross-origin"></script>
+      </div>
+      {% endif %}
+
+      <!-- REVIEWS -->
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" data-aos="fade-up"
+           x-data="{
+             reviews: [], loading: true,
+             formOpen: false, submitted: false, submitting: false, errorMsg: '',
+             rating: 0, hoverRating: 0, name: '', body: '',
+             sf(i, v) { return i <= v ? '#f59e0b' : '#e5e7eb'; },
+             avg() {
+               if (!this.reviews.length) return null;
+               return (this.reviews.reduce((s,r) => s + r.rating, 0) / this.reviews.length).toFixed(1);
+             },
+             async load() {
+               try {
+                 const d = await (await fetch('/api/v1/feedback/attractions/{{ attraction.slug }}/reviews/')).json();
+                 this.reviews = d.results ?? d;
+               } catch(e) {}
+               this.loading = false;
+             },
+             async submit() {
+               if (!this.rating || !this.name.trim() || !this.body.trim()) return;
+               this.submitting = true; this.errorMsg = '';
+               try {
+                 const res = await fetch('/api/v1/feedback/attractions/{{ attraction.slug }}/reviews/', {
+                   method: 'POST',
+                   headers: { 'Content-Type': 'application/json' },
+                   body: JSON.stringify({ rating: this.rating, body: this.body, reviewer_name: this.name })
+                 });
+                 if (res.ok || res.status === 201) { this.submitted = true; this.formOpen = false; }
+                 else { this.errorMsg = 'Something went wrong. Please try again.'; }
+               } catch(e) { this.errorMsg = 'Network error. Please try again.'; }
+               this.submitting = false;
+             }
+           }"
+           x-init="load()">
+
+        <!-- Header row -->
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h3 class="font-display text-xl font-bold text-tz-dark flex items-center gap-2">
+              <i data-lucide="star" class="w-5 h-5 text-amber-400"></i> Reviews
+            </h3>
+            <p x-show="avg()" class="text-tz-muted text-sm mt-0.5">
+              <span x-text="avg()" class="font-bold text-tz-dark"></span>/5
+              &nbsp;·&nbsp;<span x-text="reviews.length"></span> review<span x-show="reviews.length !== 1">s</span>
+            </p>
+          </div>
+          <button @click="formOpen = !formOpen" x-show="!submitted"
+                  class="inline-flex items-center gap-2 bg-tz-savanna text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-tz-savanna/90 transition-colors">
+            <i data-lucide="pen-line" class="w-4 h-4"></i>
+            <span x-text="formOpen ? 'Cancel' : 'Write a Review'"></span>
+          </button>
+        </div>
+
+        <!-- Thank-you banner -->
+        <div x-show="submitted" class="bg-green-50 border border-green-200 rounded-xl p-3 mb-5 flex items-center gap-2 text-green-700 text-sm">
+          <i data-lucide="check-circle" class="w-4 h-4 flex-shrink-0"></i>
+          Thanks! Your review is awaiting approval.
+        </div>
+
+        <!-- Minimal form -->
+        <div x-show="formOpen" x-collapse class="mb-6">
+          <div class="bg-tz-light rounded-2xl p-5 space-y-4">
+
+            <!-- Stars -->
+            <div>
+              <p class="text-xs font-semibold text-tz-dark uppercase tracking-wider mb-2">Your Rating</p>
+              <div class="flex gap-1">
+                <template x-for="i in 5" :key="i">
+                  <button type="button" @click="rating = i" @mouseenter="hoverRating = i" @mouseleave="hoverRating = 0">
+                    <svg viewBox="0 0 24 24" class="w-8 h-8" :fill="sf(i, hoverRating || rating)" stroke="none">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  </button>
+                </template>
+              </div>
+              <p class="text-xs text-tz-muted mt-1 h-4" x-text="['','Poor','Fair','Good','Very Good','Excellent'][rating] || ''"></p>
+            </div>
+
+            <!-- Name -->
+            <input type="text" x-model="name" placeholder="Your name"
+                   class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-tz-savanna focus:ring-1 focus:ring-tz-savanna/30 transition" />
+
+            <!-- Message -->
+            <textarea x-model="body" rows="3" placeholder="Share your experience..."
+                      class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-tz-savanna focus:ring-1 focus:ring-tz-savanna/30 transition resize-none"></textarea>
+
+            <p x-show="errorMsg" x-text="errorMsg" class="text-red-600 text-xs"></p>
+
+            <button @click="submit()" :disabled="submitting || !rating || !name.trim() || !body.trim()"
+                    class="w-full bg-tz-savanna text-white font-bold py-3 rounded-xl hover:bg-tz-savanna/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+              <span x-text="submitting ? 'Submitting...' : 'Post Review'"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- List -->
+        <div x-show="loading" class="py-6 text-center text-tz-muted text-sm">Loading...</div>
+
+        <div x-show="!loading && !reviews.length" class="py-8 text-center">
+          <i data-lucide="message-square" class="w-7 h-7 text-gray-200 mx-auto mb-2"></i>
+          <p class="text-tz-muted text-sm">No reviews yet — be the first.</p>
+        </div>
+
+        <div x-show="!loading && reviews.length" class="space-y-3">
+          <template x-for="r in reviews" :key="r.id">
+            <div class="border border-gray-100 rounded-xl p-4">
+              <div class="flex items-center justify-between mb-1.5">
+                <p class="font-semibold text-tz-dark text-sm" x-text="r.reviewer_name || 'Anonymous'"></p>
+                <div class="flex gap-0.5">
+                  <template x-for="i in 5" :key="i">
+                    <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" :fill="sf(i, r.rating)" stroke="none">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  </template>
+                </div>
+              </div>
+              <p class="text-tz-muted text-sm leading-relaxed" x-text="r.body"></p>
+            </div>
+          </template>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Sidebar -->
+    <div class="mt-10 lg:mt-0 space-y-6 sticky-sidebar">
+
+      <!-- Key Info -->
+      <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-left">
+        <h3 class="font-semibold text-tz-dark mb-4 text-sm uppercase tracking-wider">Key Information</h3>
+        <table class="key-info-table w-full text-sm">
+          <tbody class="divide-y divide-gray-50">
+            <tr class="py-2"><td class="py-2.5 text-tz-muted pr-4 whitespace-nowrap">Region</td><td class="py-2.5 font-medium text-tz-dark">{{ attraction.region.name }}</td></tr>
+            <tr><td class="py-2.5 text-tz-muted pr-4">Category</td><td class="py-2.5 font-medium text-tz-dark">{{ attraction.get_category_display }}</td></tr>
+            <tr><td class="py-2.5 text-tz-muted pr-4">Difficulty</td><td class="py-2.5 font-medium text-tz-dark">{{ attraction.get_difficulty_level_display }}</td></tr>
+            {% if attraction.latitude %}<tr><td class="py-2.5 text-tz-muted pr-4">Coordinates</td><td class="py-2.5 font-mono text-xs text-tz-dark">{{ attraction.latitude }}, {{ attraction.longitude }}</td></tr>{% endif %}
+            {% if attraction.altitude %}<tr><td class="py-2.5 text-tz-muted pr-4">Altitude</td><td class="py-2.5 font-medium text-tz-dark">{{ attraction.altitude }}m</td></tr>{% endif %}
+            {% if attraction.requires_guide %}<tr><td class="py-2.5 text-tz-muted pr-4">Guide Required</td><td class="py-2.5 font-medium text-green-600">Yes</td></tr>{% endif %}
+            {% if attraction.requires_permit %}<tr><td class="py-2.5 text-tz-muted pr-4">Permit Required</td><td class="py-2.5 font-medium text-amber-600">Yes</td></tr>{% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Seasonal availability -->
+      {% if attraction.seasonal_availability %}
+      <div class="bg-tz-sand/40 rounded-2xl p-6" data-aos="fade-left" data-aos-delay="100">
+        <h3 class="font-semibold text-tz-dark mb-3 text-sm uppercase tracking-wider flex items-center gap-2">
+          <i data-lucide="sun" class="w-4 h-4 text-tz-savanna"></i> Seasonality
+        </h3>
+        <p class="text-sm text-tz-dark/80 leading-relaxed">{{ attraction.seasonal_availability }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Region card -->
+      <div class="bg-tz-forest text-white rounded-2xl p-6" data-aos="fade-left" data-aos-delay="150">
+        <p class="text-white/60 text-xs uppercase tracking-wider mb-1">Located in</p>
+        <h3 class="font-display text-xl font-bold mb-3">{{ attraction.region.name }}</h3>
+        <p class="text-white/70 text-sm mb-4">{{ attraction.region.description|striptags|truncatechars:120 }}</p>
+        <a href="{% url 'web:region-detail' attraction.region.slug %}" class="inline-flex items-center gap-1.5 text-tz-savanna text-sm font-semibold hover:gap-2.5 transition-all">
+          Explore region <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <!-- Map card -->
+      {% if attraction.latitude and attraction.longitude %}
+      <div class="bg-white rounded-2xl shadow-sm overflow-hidden" data-aos="fade-left" data-aos-delay="200">
+        {% if google_maps_api_key %}
+        <iframe
+          src="https://www.google.com/maps/embed/v1/place?key={{ google_maps_api_key }}&q={{ attraction.latitude }},{{ attraction.longitude }}&zoom=13&maptype=roadmap"
+          width="100%" height="220" style="border:0;display:block" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen>
+        </iframe>
+        {% else %}
+        <div id="attraction-map" class="h-52 w-full z-0"></div>
+        {% endif %}
+        <div class="px-4 py-3 flex items-center justify-between border-t border-gray-100">
+          <p class="text-xs text-tz-muted font-mono truncate">{{ attraction.latitude }}, {{ attraction.longitude }}</p>
+          <a href="https://maps.google.com/?q={{ attraction.latitude }},{{ attraction.longitude }}"
+             target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-1.5 text-xs font-semibold text-tz-sky hover:underline flex-shrink-0 ml-3">
+            <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Directions
+          </a>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <!-- TOUR OPERATORS -->
+  {% if operators %}
+  <section class="mt-16" aria-labelledby="operators-heading">
+    <div class="mb-8">
+      <p class="text-tz-savanna text-xs font-mono tracking-[0.15em] uppercase mb-1">Guided Experiences</p>
+      <h2 id="operators-heading" class="font-display text-2xl font-bold text-tz-dark">Tour Operators for {{ attraction.name }}</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for op in operators %}
+      <div class="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-shadow" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}50">
+        <div class="flex items-center gap-3">
+          {% if op.logo %}
+          <img src="{{ op.logo.url }}" alt="{{ op.name }}" class="w-12 h-12 rounded-xl object-cover flex-shrink-0" loading="lazy" />
+          {% else %}
+          <div class="w-12 h-12 rounded-xl bg-tz-forest/10 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="building-2" class="w-5 h-5 text-tz-forest"></i>
+          </div>
+          {% endif %}
+          <div class="min-w-0">
+            <h3 class="font-semibold text-tz-dark truncate">{{ op.name }}</h3>
+            {% if op.city %}<p class="text-xs text-tz-muted flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> {{ op.city }}</p>{% endif %}
+          </div>
+        </div>
+        {% if op.short_description %}<p class="text-sm text-tz-muted leading-relaxed line-clamp-2">{{ op.short_description }}</p>{% endif %}
+        <div class="mt-auto flex gap-2 flex-wrap">
+          {% if op.website %}
+          <a href="{{ op.website }}" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-1.5 text-xs font-semibold text-tz-forest border border-tz-forest/20 px-3 py-1.5 rounded-full hover:bg-tz-forest hover:text-white transition-colors">
+            <i data-lucide="external-link" class="w-3 h-3"></i> Visit Website
+          </a>
+          {% endif %}
+          {% if op.phone %}
+          <a href="tel:{{ op.phone }}"
+             class="inline-flex items-center gap-1.5 text-xs font-semibold text-tz-savanna border border-tz-savanna/20 px-3 py-1.5 rounded-full hover:bg-tz-savanna hover:text-white transition-colors">
+            <i data-lucide="phone" class="w-3 h-3"></i> {{ op.phone }}
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- RELATED ATTRACTIONS -->
+  {% if related %}
+  <section class="mt-16" aria-labelledby="related-heading">
+    <div class="flex items-end justify-between mb-8">
+      <div>
+        <p class="text-tz-savanna text-xs font-mono tracking-[0.15em] uppercase mb-1">More to Explore</p>
+        <h2 id="related-heading" class="font-display text-2xl font-bold text-tz-dark">Nearby in {{ attraction.region.name }}</h2>
+      </div>
+      <a href="{% url 'web:region-detail' attraction.region.slug %}" class="hidden sm:inline-flex items-center gap-1.5 text-tz-forest font-semibold text-sm hover:text-tz-savanna transition-colors">
+        View all <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for a in related %}
+      <a href="{% url 'web:attraction-detail' a.slug %}" class="attraction-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}50">
+        <div class="relative h-44 overflow-hidden">
+          {% if a.featured_image %}<img src="{{ a.featured_image.url }}" alt="{{ a.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          {% else %}<div class="img-placeholder w-full h-full"><i data-lucide="image" class="w-6 h-6"></i></div>{% endif %}
+        </div>
+        <div class="p-4">
+          <h3 class="font-display font-bold text-tz-dark group-hover:text-tz-forest transition-colors">{{ a.name }}</h3>
+          <p class="text-tz-muted text-sm mt-1 line-clamp-2">{{ a.short_description }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% if not google_maps_api_key %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9/dist/leaflet.css" />
+{% endblock %}
+{% endif %}
+
+{% block extra_js %}
+{% if not google_maps_api_key %}
+<script src="https://unpkg.com/leaflet@1.9/dist/leaflet.js"></script>
+{% endif %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof Splide !== 'undefined' && document.getElementById('gallery-splide')) {
+    new Splide('#gallery-splide', {
+      type: 'loop', autoplay: true, interval: 5000,
+      arrows: true, pagination: true, speed: 800,
+    }).mount();
+  }
+  {% if not google_maps_api_key %}{% if attraction.latitude and attraction.longitude %}
+  const map = L.map('attraction-map', { scrollWheelZoom: false, zoomControl: true })
+               .setView([{{ attraction.latitude }}, {{ attraction.longitude }}], 13);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    maxZoom: 19,
+  }).addTo(map);
+  L.marker([{{ attraction.latitude }}, {{ attraction.longitude }}])
+   .addTo(map)
+   .bindPopup('<strong>{{ attraction.name|escapejs }}</strong>');
+  {% endif %}{% endif %}
+});
+</script>
+{% endblock %}

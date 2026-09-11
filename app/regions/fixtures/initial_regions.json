@@ -1,0 +1,44 @@
+[
+  {
+    "model": "regions.region",
+    "pk": 1,
+    "fields": {
+      "name": "Kilimanjaro",
+      "slug": "kilimanjaro",
+      "description": "The Kilimanjaro Region is home to Africa's highest peak, Mount Kilimanjaro (5,895m), and the gateway city of Moshi. The region sits on the slopes of the mountain, featuring lush coffee and banana plantations, Chagga cultural villages, and the spectacular Kilimanjaro National Park — a UNESCO World Heritage Site attracting thousands of trekkers annually.",
+      "image": "",
+      "latitude": "-3.067400",
+      "longitude": "37.355600",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "regions.region",
+    "pk": 2,
+    "fields": {
+      "name": "Arusha",
+      "slug": "arusha",
+      "description": "Arusha is Tanzania's safari capital and the gateway to many of Africa's most iconic wildlife destinations. Nestled between Mount Meru and Mount Kilimanjaro, the region encompasses Arusha National Park, Serengeti, Ngorongoro Crater, Lake Manyara, and Tarangire — making it the beating heart of Tanzania's northern safari circuit.",
+      "image": "",
+      "latitude": "-3.386900",
+      "longitude": "36.683000",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "regions.region",
+    "pk": 3,
+    "fields": {
+      "name": "Zanzibar",
+      "slug": "zanzibar",
+      "description": "The Zanzibar Archipelago is a semi-autonomous region of Tanzania composed of Unguja (Zanzibar Island) and Pemba Island. Famous for its turquoise Indian Ocean waters, white-sand beaches, and the UNESCO-listed Stone Town — a Swahili, Arab, and colonial heritage hub. Zanzibar is also the world's leading producer of cloves.",
+      "image": "",
+      "latitude": "-6.165200",
+      "longitude": "39.202200",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  }
+]

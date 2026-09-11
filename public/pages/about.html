@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Xenohuru — Open-Source Tanzania Travel Platform{% endblock %}
+{% block meta_description %}Xenohuru is a free, community-driven platform that makes Tanzania's destinations, wildlife, and travel data accessible to everyone.{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"AboutPage","name":"About Xenohuru","description":"Xenohuru is a free, community-driven platform that makes Tanzania's destinations, wildlife, and travel data accessible to everyone.","url":"{{ request.build_absolute_uri }}","inLanguage":"en","about":{"@type":"Organization","name":"Xenohuru","url":"{{ request.scheme }}://{{ request.get_host }}","description":"Open-source Tanzania tourism platform — GPS-accurate data, real-time weather, endemic species, and rich travel guides.","foundingDate":"2024","license":"https://opensource.org/licenses/MIT","sameAs":["https://github.com/xenohuru"]}}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="bg-tz-savanna pt-32 pb-16 px-4 text-center hero-grain relative overflow-hidden">
+  <div class="absolute inset-0 dot-pattern opacity-10"></div>
+  <div class="relative">
+    <p class="text-xs font-mono tracking-widest text-white/60 uppercase mb-3">Kuhusu Xenohuru — About Us</p>
+    <h1 class="font-display text-4xl sm:text-5xl font-black text-white mb-4 leading-tight">The Open Platform for<br class="hidden sm:block" /> Tanzania Travel</h1>
+    <p class="text-white/80 text-lg max-w-2xl mx-auto mb-8">Xenohuru is a free, community-driven platform that makes Tanzania's destinations, wildlife, and travel data accessible to everyone — travellers, researchers, developers, and locals alike.</p>
+    <div class="flex flex-wrap gap-3 justify-center">
+      <a href="https://github.com/xenohuru" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-white text-tz-savanna font-bold px-5 py-2.5 rounded-xl hover:bg-amber-50 transition-colors text-sm"><i data-lucide="github" class="w-4 h-4"></i> View on GitHub</a>
+      <a href="{% url 'web:sponsor' %}" class="flex items-center gap-2 bg-white/15 border border-white/30 text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-white/25 transition-colors text-sm"><i data-lucide="heart" class="w-4 h-4"></i> Support the Project</a>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="bg-white border-b border-gray-100 py-14">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center" data-aos="fade-up">
+    <i data-lucide="map-pin" class="w-6 h-6 text-tz-savanna mx-auto mb-3"></i>
+    <h2 class="font-display text-2xl font-bold text-tz-dark mb-4">Our Mission</h2>
+    <p class="text-tz-dark/75 text-lg leading-relaxed">Tanzania has hundreds of attractions — national parks, ancient gorges, coral reefs, mountain peaks, and cultural villages — yet most travel platforms bury them behind paywalls or present outdated, inaccurate data. Xenohuru exists to change that.</p>
+    <p class="text-tz-dark/75 text-lg leading-relaxed mt-4">We believe accurate, open travel data benefits the entire ecosystem: tourists plan better trips, local operators get discovered, conservationists reach wider audiences, and Tanzania's natural heritage gets the attention it deserves.</p>
+  </div>
+</section>
+
+<!-- WHAT WE COVER -->
+<section class="py-14 bg-tz-light">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="font-display text-2xl font-bold text-tz-dark text-center mb-8" data-aos="fade-up">What We Cover</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div class="bg-white rounded-2xl p-5 text-center shadow-sm" data-aos="fade-up" data-aos-delay="0">
+        <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center mx-auto mb-3"><i data-lucide="mountain" class="w-5 h-5 text-tz-savanna"></i></div>
+        <p class="font-bold text-tz-dark text-sm">250+ Attractions</p>
+        <p class="text-tz-muted text-xs mt-1">GPS-mapped, categorised</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 text-center shadow-sm" data-aos="fade-up" data-aos-delay="50">
+        <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center mx-auto mb-3"><i data-lucide="map" class="w-5 h-5 text-tz-savanna"></i></div>
+        <p class="font-bold text-tz-dark text-sm">30+ Regions</p>
+        <p class="text-tz-muted text-xs mt-1">Detailed travel guides</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 text-center shadow-sm" data-aos="fade-up" data-aos-delay="100">
+        <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center mx-auto mb-3"><i data-lucide="leaf" class="w-5 h-5 text-green-600"></i></div>
+        <p class="font-bold text-tz-dark text-sm">Wildlife Data</p>
+        <p class="text-tz-muted text-xs mt-1">Endemic species & habitats</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 text-center shadow-sm" data-aos="fade-up" data-aos-delay="150">
+        <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-3"><i data-lucide="cloud-sun" class="w-5 h-5 text-blue-500"></i></div>
+        <p class="font-bold text-tz-dark text-sm">Live Weather</p>
+        <p class="text-tz-muted text-xs mt-1">Real-time conditions</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 text-center shadow-sm" data-aos="fade-up" data-aos-delay="200">
+        <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center mx-auto mb-3"><i data-lucide="compass" class="w-5 h-5 text-tz-savanna"></i></div>
+        <p class="font-bold text-tz-dark text-sm">Itineraries</p>
+        <p class="text-tz-muted text-xs mt-1">Curated routes</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 text-center shadow-sm" data-aos="fade-up" data-aos-delay="250">
+        <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3"><i data-lucide="pen-line" class="w-5 h-5 text-amber-600"></i></div>
+        <p class="font-bold text-tz-dark text-sm">Travel Blog</p>
+        <p class="text-tz-muted text-xs mt-1">In-depth guides</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="py-14 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="font-display text-2xl font-bold text-tz-dark text-center mb-10" data-aos="fade-up">Our Values</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="p-6 rounded-2xl border border-gray-100 hover:border-tz-sand transition-colors" data-aos="fade-up" data-aos-delay="0">
+        <div class="w-10 h-10 rounded-xl border border-gray-100 flex items-center justify-center mb-4"><i data-lucide="globe" class="w-5 h-5 text-tz-savanna"></i></div>
+        <h3 class="font-bold text-tz-dark mb-2">Open by Default</h3>
+        <p class="text-tz-muted text-sm">Every line of code is public. Every dataset is freely accessible. No paywalls, no locked features — ever.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:border-tz-sand transition-colors" data-aos="fade-up" data-aos-delay="50">
+        <div class="w-10 h-10 rounded-xl border border-gray-100 flex items-center justify-center mb-4"><i data-lucide="heart" class="w-5 h-5 text-rose-500"></i></div>
+        <h3 class="font-bold text-tz-dark mb-2">Community First</h3>
+        <p class="text-tz-muted text-sm">Built by Tanzanians and travel enthusiasts worldwide. The platform improves because people care enough to contribute.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:border-tz-sand transition-colors" data-aos="fade-up" data-aos-delay="100">
+        <div class="w-10 h-10 rounded-xl border border-gray-100 flex items-center justify-center mb-4"><i data-lucide="users" class="w-5 h-5 text-blue-500"></i></div>
+        <h3 class="font-bold text-tz-dark mb-2">For Everyone</h3>
+        <p class="text-tz-muted text-sm">Travellers, researchers, developers, and locals — Xenohuru serves all audiences equally.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:border-tz-sand transition-colors" data-aos="fade-up" data-aos-delay="150">
+        <div class="w-10 h-10 rounded-xl border border-gray-100 flex items-center justify-center mb-4"><i data-lucide="leaf" class="w-5 h-5 text-green-600"></i></div>
+        <h3 class="font-bold text-tz-dark mb-2">Conservation Aware</h3>
+        <p class="text-tz-muted text-sm">We surface accurate ecosystem and wildlife data to help visitors make responsible travel choices.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:border-tz-sand transition-colors" data-aos="fade-up" data-aos-delay="200">
+        <div class="w-10 h-10 rounded-xl border border-gray-100 flex items-center justify-center mb-4"><i data-lucide="shield" class="w-5 h-5 text-purple-500"></i></div>
+        <h3 class="font-bold text-tz-dark mb-2">Trustworthy Data</h3>
+        <p class="text-tz-muted text-sm">GPS-verified locations, community-reviewed content, and transparent sourcing — accuracy is non-negotiable.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:border-tz-sand transition-colors" data-aos="fade-up" data-aos-delay="250">
+        <div class="w-10 h-10 rounded-xl border border-gray-100 flex items-center justify-center mb-4"><i data-lucide="code-2" class="w-5 h-5 text-amber-600"></i></div>
+        <h3 class="font-bold text-tz-dark mb-2">Developer Friendly</h3>
+        <p class="text-tz-muted text-sm">Public REST API, open data exports, and a codebase welcoming contributors of all skill levels.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="py-14 bg-tz-light">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <h2 class="font-display text-2xl font-bold text-tz-dark text-center mb-10" data-aos="fade-up">Our Journey</h2>
+    <div class="relative border-l-2 border-tz-forest/20 pl-8 space-y-8">
+      <div class="relative" data-aos="fade-left">
+        <span class="absolute -left-10 w-4 h-4 rounded-full bg-tz-forest ring-4 ring-white"></span>
+        <p class="text-xs font-mono text-tz-savanna mb-1">2024</p>
+        <p class="text-tz-dark/80">Xenohuru founded — concept and initial data collection</p>
+      </div>
+      <div class="relative" data-aos="fade-left" data-aos-delay="50">
+        <span class="absolute -left-10 w-4 h-4 rounded-full bg-tz-forest ring-4 ring-white"></span>
+        <p class="text-xs font-mono text-tz-savanna mb-1">Early 2025</p>
+        <p class="text-tz-dark/80">Open-source codebase launched on GitHub</p>
+      </div>
+      <div class="relative" data-aos="fade-left" data-aos-delay="100">
+        <span class="absolute -left-10 w-4 h-4 rounded-full bg-tz-forest ring-4 ring-white"></span>
+        <p class="text-xs font-mono text-tz-savanna mb-1">Mid 2025</p>
+        <p class="text-tz-dark/80">REST API goes public — 100+ attractions mapped</p>
+      </div>
+      <div class="relative" data-aos="fade-left" data-aos-delay="150">
+        <span class="absolute -left-10 w-4 h-4 rounded-full bg-tz-forest ring-4 ring-white"></span>
+        <p class="text-xs font-mono text-tz-savanna mb-1">Late 2025</p>
+        <p class="text-tz-dark/80">Community contributions open — regions, blog, operators</p>
+      </div>
+      <div class="relative" data-aos="fade-left" data-aos-delay="200">
+        <span class="absolute -left-10 w-5 h-5 rounded-full bg-tz-savanna ring-4 ring-white"></span>
+        <p class="text-xs font-mono text-tz-savanna mb-1">2026</p>
+        <p class="text-tz-dark font-semibold">Django full-stack, interactive maps, SEO, AI chatbot</p>
+      </div>
+      <div class="relative" data-aos="fade-left" data-aos-delay="250">
+        <span class="absolute -left-10 w-4 h-4 rounded-full bg-white border-2 border-tz-forest ring-4 ring-white"></span>
+        <p class="text-xs font-mono text-tz-savanna mb-1">Soon →</p>
+        <p class="text-tz-muted">Tour itineraries, multi-language support, mobile app</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-14 bg-tz-forest text-white text-center cta-pattern">
+  <div class="max-w-2xl mx-auto px-4" data-aos="fade-up">
+    <i data-lucide="star" class="w-8 h-8 text-tz-savanna mx-auto mb-4"></i>
+    <h2 class="font-display text-3xl font-bold mb-4">Join the Community</h2>
+    <p class="text-white/70 mb-8">Help us build the most complete Tanzania travel resource in the world.</p>
+    <div class="flex flex-wrap gap-3 justify-center">
+      <a href="https://github.com/xenohuru" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-white text-tz-forest font-bold px-6 py-3 rounded-full hover:bg-tz-sand transition-colors"><i data-lucide="github" class="w-5 h-5"></i> Contribute on GitHub</a>
+      <a href="{% url 'web:contact' %}" class="flex items-center gap-2 bg-tz-savanna text-white font-semibold px-6 py-3 rounded-full hover:bg-tz-savanna/90 transition-colors"><i data-lucide="mail" class="w-5 h-5"></i> Get in Touch</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

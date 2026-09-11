@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ article.meta_title|default:article.title }} | Xenohuru Blog{% endblock %}
+{% block meta_description %}{{ article.meta_description|default:article.excerpt|truncatechars:155 }}{% endblock %}
+{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_description %}{{ article.excerpt }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% if article.featured_image %}{% block og_image %}{{ article.featured_image.url }}{% endblock %}{% endif %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ article.title|escapejs }}",
+  "description": "{{ article.excerpt|escapejs }}",
+  "url": "{{ CANONICAL_URL }}",
+  {% if article.featured_image %}"image": "{{ article.featured_image.url }}",{% endif %}
+  {% if article.published_at %}"datePublished": "{{ article.published_at|date:'c' }}",{% endif %}
+  "dateModified": "{{ article.updated_at|date:'c' }}",
+  {% if article.author %}"author": {"@type": "Person", "name": "{{ article.author.get_full_name|default:article.author.username|escapejs }}"},{% endif %}
+  "publisher": {"@type": "Organization", "name": "Xenohuru", "url": "{{ SITE_URL }}"},
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "{{ SITE_URL }}"},
+      {"@type": "ListItem", "position": 2, "name": "Blog", "item": "{{ SITE_URL }}/blog"},
+      {"@type": "ListItem", "position": 3, "name": "{{ article.title|escapejs }}", "item": "{{ CANONICAL_URL }}"}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="relative pt-32 pb-16 {% if article.featured_image %}overflow-hidden{% else %}bg-tz-dark{% endif %}">
+  {% if article.featured_image %}
+  <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="absolute inset-0 w-full h-full object-cover" loading="eager" />
+  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30"></div>
+  {% endif %}
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-white text-center">
+    <nav class="flex items-center justify-center gap-2 text-white/60 text-sm mb-6" aria-label="Breadcrumb">
+      <a href="{% url 'web:blog-list' %}" class="hover:text-white transition-colors flex items-center gap-1.5"><i data-lucide="arrow-left" class="w-4 h-4"></i> Blog</a>
+    </nav>
+    <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black leading-tight mb-4">{{ article.title }}</h1>
+    <p class="text-white/60 flex items-center justify-center gap-4 text-sm">
+      {% if article.author %}<span class="flex items-center gap-1.5"><i data-lucide="user" class="w-4 h-4"></i> {{ article.author.get_full_name|default:article.author.username }}</span>{% endif %}
+      <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-4 h-4"></i> {{ article.published_at|date:"N j, Y" }}</span>
+    </p>
+  </div>
+</section>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="lg:grid lg:grid-cols-3 lg:gap-12">
+    <article class="lg:col-span-2">
+      <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-10">
+        <div class="prose prose-lg max-w-none text-tz-dark/85 leading-relaxed [&>h2]:font-display [&>h2]:text-tz-forest [&>h3]:text-tz-forest [&>blockquote]:border-l-tz-savanna [&>blockquote]:text-tz-earth">
+          {{ article.content|safe }}
+        </div>
+      </div>
+    </article>
+
+    <aside class="mt-10 lg:mt-0 sticky-sidebar space-y-6">
+      {% if article.author %}
+      <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-left">
+        <p class="text-xs text-tz-muted uppercase tracking-wider mb-3">Written by</p>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-tz-forest flex items-center justify-center text-white font-bold text-lg">{{ article.author.get_full_name|default:article.author.username|first|upper }}</div>
+          <div>
+            <p class="font-semibold text-tz-dark">{{ article.author.get_full_name|default:article.author.username }}</p>
+            <p class="text-tz-muted text-xs">Xenohuru Contributor</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="bg-tz-forest text-white rounded-2xl p-6" data-aos="fade-left" data-aos-delay="100">
+        <p class="text-white/60 text-xs uppercase tracking-wider mb-2">Explore Tanzania</p>
+        <h3 class="font-display text-lg font-bold mb-4">Find Your Adventure</h3>
+        <a href="{% url 'web:attraction-list' %}" class="inline-flex items-center gap-2 bg-tz-savanna text-white text-sm font-semibold px-4 py-2.5 rounded-full hover:bg-tz-savanna/90 transition-colors">
+          <i data-lucide="compass" class="w-4 h-4"></i> Browse Attractions
+        </a>
+      </div>
+    </aside>
+  </div>
+
+  <!-- GYG WIDGET -->
+  <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8 mt-12" data-aos="fade-up">
+    <h3 class="font-display text-xl font-bold text-tz-dark mb-2 flex items-center gap-2">
+      <i data-lucide="compass" class="w-5 h-5 text-tz-savanna"></i> Plan Your Tanzania Experience
+    </h3>
+    <p class="text-tz-muted text-sm mb-6">Browse guided tours, safaris, and activities across Tanzania.</p>
+    <div data-gyg-href="https://widget.getyourguide.com/default/activities.frame"
+         data-gyg-locale-code="en-US"
+         data-gyg-widget="activities"
+         data-gyg-number-of-items="4"
+         data-gyg-partner-id="J8EVQ8S"
+         data-gyg-location-id="274"
+         data-gyg-cmp="xenohuru_blog_{{ article.slug }}">
+    </div>
+    <script async defer src="https://widget.getyourguide.com/dist/pa.umd.production.min.js" referrerpolicy="strict-origin-when-cross-origin"></script>
+  </div>
+
+  {% if related %}
+  <section class="mt-16">
+    <h2 class="font-display text-2xl font-bold text-tz-dark mb-8">More Articles</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for a in related %}
+      <a href="{% url 'web:blog-detail' a.slug %}" class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow" data-aos="fade-up">
+        {% if a.featured_image %}<img src="{{ a.featured_image.url }}" alt="{{ a.title }}" class="blog-card-img" loading="lazy" />{% else %}<div class="blog-card-img bg-tz-sand flex items-center justify-center"><i data-lucide="newspaper" class="w-8 h-8 text-tz-earth/40"></i></div>{% endif %}
+        <div class="p-5">
+          <h3 class="font-display font-bold text-tz-dark group-hover:text-tz-forest transition-colors line-clamp-2">{{ a.title }}</h3>
+          <p class="text-tz-muted text-xs mt-1">{{ a.published_at|date:"N j, Y" }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

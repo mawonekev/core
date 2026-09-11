@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tanzania Regions — Travel Guide by Area | Xenohuru{% endblock %}
+{% block meta_description %}Explore Tanzania's diverse regions — from the Serengeti plains of Mara to Kilimanjaro's slopes and Zanzibar's islands. Complete travel guides.{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","name":"Tanzania Regions — Travel Guide by Area","description":"Explore Tanzania's diverse regions — from the Serengeti plains of Mara to Kilimanjaro's slopes and Zanzibar's islands.","url":"{{ request.build_absolute_uri }}","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Xenohuru","url":"{{ request.scheme }}://{{ request.get_host }}"},"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ request.scheme }}://{{ request.get_host }}"},{"@type":"ListItem","position":2,"name":"Regions","item":"{{ request.build_absolute_uri }}"}]}}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="relative pt-32 pb-20 bg-tz-forest hero-grain overflow-hidden">
+  <div class="absolute inset-0 dot-pattern opacity-10"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 text-white text-center">
+    <p class="text-tz-savanna text-xs font-mono tracking-[0.2em] uppercase mb-3" data-aos="fade-up">Tanzania's Diverse Landscapes</p>
+    <h1 class="font-display text-5xl font-black mb-4" data-aos="fade-up" data-aos-delay="100">Explore by Region</h1>
+    <p class="text-white/70 text-lg max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="200">Each region tells a different story — choose your Tanzania adventure.</p>
+  </div>
+</section>
+
+<section class="py-16 bg-tz-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if regions %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for region in regions %}
+      <a href="{% url 'web:region-detail' region.slug %}" class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}75">
+        <div class="relative h-56 overflow-hidden">
+          {% if region.image %}
+          <img src="{{ region.image.url }}" alt="{{ region.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          {% else %}
+          <div class="absolute inset-0 bg-gradient-to-br from-tz-forest to-tz-sky"></div>
+          {% endif %}
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <span class="region-index" aria-hidden="true">{{ forloop.counter }}</span>
+        </div>
+        <div class="p-6">
+          <h2 class="font-display text-xl font-bold text-tz-dark mb-2 group-hover:text-tz-forest transition-colors">{{ region.name }}</h2>
+          <p class="text-tz-muted text-sm line-clamp-3 mb-4">{{ region.description|striptags|truncatechars:140 }}</p>
+          <div class="flex items-center justify-between text-sm">
+            <span class="flex items-center gap-1.5 text-tz-muted">
+              <i data-lucide="layout-grid" class="w-4 h-4"></i> {{ region.attractions.count }} attractions
+            </span>
+            <span class="inline-flex items-center gap-1 text-tz-forest font-semibold group-hover:text-tz-savanna transition-colors">
+              Explore <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+            </span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="state-empty">
+      <div class="state-icon-wrap"><i data-lucide="map" class="w-8 h-8 text-tz-savanna"></i></div>
+      <p class="text-tz-muted">No regions found.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

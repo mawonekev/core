@@ -1,0 +1,462 @@
+{% extends "base.html" %}
+{% load static web_extras %}
+
+{% block title %}FAQ — Help & Transparency | Xenohuru{% endblock %}
+{% block meta_description %}Everything about how Xenohuru works — our data sources, ethics, community, costs, and how you can get involved.{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Is Xenohuru free to use?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Xenohuru is completely free for travellers, researchers, and developers. No account required to browse."}},
+    {"@type": "Question", "name": "Where does Xenohuru get its data?", "acceptedAnswer": {"@type": "Answer", "text": "Data comes from community contributors, official Tanzania Tourism Board sources, OpenStreetMap, and verified operator listings."}},
+    {"@type": "Question", "name": "How accurate is the attraction information?", "acceptedAnswer": {"@type": "Answer", "text": "All attractions include GPS coordinates verified against satellite imagery. Descriptions are reviewed by local contributors before approval."}},
+    {"@type": "Question", "name": "Can I contribute to Xenohuru?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Visit the Contributors page to learn how to submit attractions, correct data, or write blog articles."}}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="pt-32 pb-14 bg-tz-dark text-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <span class="inline-block px-3 py-1 rounded-full bg-tz-savanna/20 text-tz-savanna text-sm font-medium mb-6">Help & Transparency</span>
+    <h1 class="font-display text-4xl sm:text-5xl font-bold mb-5">Frequently Asked Questions</h1>
+    <p class="text-lg text-white/70 max-w-2xl mx-auto">Everything about how Xenohuru works — our data sources, ethics, community, costs, and how you can get involved.</p>
+  </div>
+</section>
+
+<!-- SECTION NAV -->
+<div class="sticky top-0 z-20 bg-white border-b border-gray-100 shadow-sm overflow-x-auto">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="flex gap-1 py-2 min-w-max">
+      <a href="#about"      class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-tz-muted hover:text-tz-dark hover:bg-tz-light transition-colors"><i data-lucide="globe" class="w-3.5 h-3.5"></i> About</a>
+      <a href="#data"       class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-tz-muted hover:text-tz-dark hover:bg-tz-light transition-colors"><i data-lucide="database" class="w-3.5 h-3.5"></i> Data</a>
+      <a href="#ethics"     class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-tz-muted hover:text-tz-dark hover:bg-tz-light transition-colors"><i data-lucide="shield" class="w-3.5 h-3.5"></i> Ethics</a>
+      <a href="#citations"  class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-tz-muted hover:text-tz-dark hover:bg-tz-light transition-colors"><i data-lucide="file-text" class="w-3.5 h-3.5"></i> Citations</a>
+      <a href="#contribute" class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-tz-muted hover:text-tz-dark hover:bg-tz-light transition-colors"><i data-lucide="users" class="w-3.5 h-3.5"></i> Contribute</a>
+      <a href="#costs"      class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-tz-muted hover:text-tz-dark hover:bg-tz-light transition-colors"><i data-lucide="heart" class="w-3.5 h-3.5"></i> Costs</a>
+      <a href="#dev"        class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-tz-muted hover:text-tz-dark hover:bg-tz-light transition-colors"><i data-lucide="code-2" class="w-3.5 h-3.5"></i> Developer</a>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-16">
+
+  <!-- ── ABOUT ─────────────────────────────────────────────────────── -->
+  <section id="about" x-data="{ open: null }">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center"><i data-lucide="globe" class="w-5 h-5 text-tz-savanna"></i></div>
+      <h2 class="font-display text-2xl font-bold text-tz-dark">About Xenohuru</h2>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-100 px-6 shadow-sm">
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 1 ? null : 1" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">What is Xenohuru?</span>
+          <i :data-lucide="open === 1 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5 group-hover:text-tz-savanna transition-colors"></i>
+        </button>
+        <div x-show="open === 1" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>Xenohuru is a free, open-source Tanzania travel and tourism platform. We aggregate accurate, GPS-verified information about Tanzania's national parks, attractions, regions, wildlife, weather, and travel logistics — and make it freely accessible to travellers, researchers, and developers worldwide.</p>
+          <p class="mt-3">The name <em>Xenohuru</em> combines <em>xeno</em> (Greek: foreign, traveller) and <em>huru</em> (Swahili: free). It reflects our mission: free, open information for those who travel — and for those who call Tanzania home.</p>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 2 ? null : 2" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Who built Xenohuru?</span>
+          <i :data-lucide="open === 2 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5 group-hover:text-tz-savanna transition-colors"></i>
+        </button>
+        <div x-show="open === 2" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>Xenohuru was founded and is led by a Tanzanian developer with a mission to build the internet's most accurate, open Tanzania travel resource. The platform is open-source — the code, data structure, and content pipeline are all public on <a href="https://github.com/xenohuru" target="_blank" rel="noopener noreferrer" class="text-tz-savanna hover:underline">GitHub</a>.</p>
+          <p class="mt-3">Content, data, and code contributions come from a growing community of travellers, developers, wildlife enthusiasts, and Tanzanians who want accurate information about their country to exist online.</p>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 3 ? null : 3" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Is Xenohuru a tour operator?</span>
+          <i :data-lucide="open === 3 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5 group-hover:text-tz-savanna transition-colors"></i>
+        </button>
+        <div x-show="open === 3" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>No. Xenohuru is not a tour operator and does not sell tours, safaris, bookings, or travel packages. We are an information platform — think of us as an open Wikipedia for Tanzania travel, not a booking agency.</p>
+        </div>
+      </div>
+
+      <div>
+        <button @click="open = open === 4 ? null : 4" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Is Xenohuru free to use?</span>
+          <i :data-lucide="open === 4 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5 group-hover:text-tz-savanna transition-colors"></i>
+        </button>
+        <div x-show="open === 4" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>Yes — 100% free, forever. No account required, no paywalls, no premium tiers. All attraction data, maps, weather information, and travel guides are freely accessible. See our <a href="{% url 'web:sponsor' %}" class="text-tz-savanna hover:underline">Support Us</a> page.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── DATA ─────────────────────────────────────────────────────── -->
+  <section id="data" x-data="{ open: null }">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center"><i data-lucide="database" class="w-5 h-5 text-tz-savanna"></i></div>
+      <h2 class="font-display text-2xl font-bold text-tz-dark">How We Collect Data</h2>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-100 px-6 shadow-sm">
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 1 ? null : 1" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Where does Xenohuru's attraction data come from?</span>
+          <i :data-lucide="open === 1 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 1" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p class="mb-3">Our data is compiled from multiple authoritative sources:</p>
+          <ul class="space-y-2">
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Official government sources:</strong> TANAPA, NCAA, TAWA, and Tanzania Tourism Board.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Academic and scientific sources:</strong> IUCN Red List conservation status, peer-reviewed ecology research, and university field studies.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">On-the-ground verification:</strong> GPS coordinates and operational details verified by community contributors with direct knowledge of each location.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Open databases:</strong> OpenStreetMap geographic data, Wikidata, and other open knowledge bases where licensing permits.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 2 ? null : 2" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">How often is the data updated?</span>
+          <i :data-lucide="open === 2 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 2" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <ul class="space-y-1.5">
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span><strong>Weather data:</strong> Refreshed hourly from open meteorological sources.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span><strong>Entry fees and park hours:</strong> Reviewed quarterly or when a community contributor flags a change.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span><strong>Wildlife and conservation status:</strong> Reviewed annually using the latest IUCN Red List and TANAPA census data.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span><strong>Attraction descriptions and photos:</strong> Updated as community contributions are reviewed and approved.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 3 ? null : 3" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Do you use AI to generate content?</span>
+          <i :data-lucide="open === 3 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 3" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>No. We do not use AI to fabricate attraction descriptions, wildlife facts, or travel information. Every fact on Xenohuru is sourced from a verifiable reference. We may use AI to assist with formatting or summarisation of verified source material — but the underlying data always traces to a citable, real-world source.</p>
+        </div>
+      </div>
+
+      <div>
+        <button @click="open = open === 4 ? null : 4" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">How accurate are entry fees and park regulations?</span>
+          <i :data-lucide="open === 4 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 4" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>We make every effort to keep fees accurate, but Tanzania's national park fees are set by TANAPA and can change without notice. Always confirm directly with <a href="https://www.tanzaniaparks.go.tz" target="_blank" rel="noopener noreferrer" class="text-tz-savanna hover:underline">tanzaniaparks.go.tz</a> before travelling.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── ETHICS ─────────────────────────────────────────────────────── -->
+  <section id="ethics" x-data="{ open: null }">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center"><i data-lucide="shield" class="w-5 h-5 text-tz-savanna"></i></div>
+      <h2 class="font-display text-2xl font-bold text-tz-dark">Data Security & Ethical Use</h2>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-100 px-6 shadow-sm">
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 1 ? null : 1" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Does Xenohuru collect personal data from visitors?</span>
+          <i :data-lucide="open === 1 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 1" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p class="mb-3">We collect minimal data:</p>
+          <ul class="space-y-1.5">
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>Standard server logs (IP, page, timestamp) — retained 30 days for security only.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>Contact form submissions — stored solely to respond to you.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>IP geolocation for weather auto-detect — processed in memory, not stored.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>We do not use tracking pixels, ad networks, or behavioural analytics. No account required.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 2 ? null : 2" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Can the platform data be used for criminal or harmful purposes?</span>
+          <i :data-lucide="open === 2 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 2" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p class="mb-3">Our Terms of Use explicitly prohibit:</p>
+          <ul class="space-y-1.5">
+            <li class="flex gap-2"><span class="text-red-500 flex-shrink-0">✗</span><span>Using wildlife location data to facilitate poaching, illegal hunting, or wildlife trafficking.</span></li>
+            <li class="flex gap-2"><span class="text-red-500 flex-shrink-0">✗</span><span>Using attraction or operator data for fraud, impersonation, or commercial deception.</span></li>
+            <li class="flex gap-2"><span class="text-red-500 flex-shrink-0">✗</span><span>Scraping or re-publishing data in ways that violate CC BY 4.0 attribution requirements.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 3 ? null : 3" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">What licence covers Xenohuru's content and code?</span>
+          <i :data-lucide="open === 3 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 3" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <ul class="space-y-2">
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Platform source code:</strong> MIT Licence — free to use, modify, and distribute with attribution.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Attraction data and written content:</strong> Creative Commons CC BY 4.0 — free to use with attribution to "Xenohuru".</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Photos:</strong> Sourced from Unsplash under the Unsplash Licence — free for commercial and non-commercial use.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <button @click="open = open === 4 ? null : 4" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">How is the API secured?</span>
+          <i :data-lucide="open === 4 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 4" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <ul class="space-y-1.5">
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>All endpoints served over HTTPS with TLS 1.2+ encryption.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>Read-only public endpoints require no authentication — consistent with our open-data mission.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>Write operations require rate limiting and human verification to prevent spam.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>API abuse beyond fair use is rate-limited and blocked.</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CITATIONS ─────────────────────────────────────────────────── -->
+  <section id="citations" x-data="{ open: null }">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center"><i data-lucide="file-text" class="w-5 h-5 text-tz-savanna"></i></div>
+      <h2 class="font-display text-2xl font-bold text-tz-dark">Citations & Sources</h2>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-100 px-6 shadow-sm">
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 1 ? null : 1" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">How do I cite Xenohuru in research or writing?</span>
+          <i :data-lucide="open === 1 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 1" x-collapse class="pb-5 text-tz-dark/80 text-sm">
+          <p class="mb-3">For academic or professional citations, use the following format:</p>
+          <div class="bg-tz-light rounded-lg p-4 font-mono text-sm text-tz-dark border border-gray-100">Xenohuru. (2025). <em>[Attraction or article name]</em>. Retrieved from xenohuru.com. Licensed under CC BY 4.0.</div>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 2 ? null : 2" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">What are Xenohuru's primary data sources?</span>
+          <i :data-lucide="open === 2 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 2" x-collapse class="pb-5 text-tz-dark/80 text-sm">
+          <ul class="space-y-2">
+            <li class="flex gap-2 pb-2 border-b border-gray-50"><span class="text-tz-savanna flex-shrink-0">→</span><span><a href="https://www.tanzaniaparks.go.tz" target="_blank" rel="noopener noreferrer" class="font-semibold text-tz-dark hover:text-tz-savanna">Tanzania National Parks (TANAPA)</a> — Park boundaries, fees, wildlife census</span></li>
+            <li class="flex gap-2 pb-2 border-b border-gray-50"><span class="text-tz-savanna flex-shrink-0">→</span><span><a href="https://www.ngorongorocrater.org" target="_blank" rel="noopener noreferrer" class="font-semibold text-tz-dark hover:text-tz-savanna">Ngorongoro Conservation Area (NCAA)</a> — Ngorongoro-specific data</span></li>
+            <li class="flex gap-2 pb-2 border-b border-gray-50"><span class="text-tz-savanna flex-shrink-0">→</span><span><a href="https://www.tanzaniatourism.go.tz" target="_blank" rel="noopener noreferrer" class="font-semibold text-tz-dark hover:text-tz-savanna">Tanzania Tourism Board (TTB)</a> — Official tourism statistics</span></li>
+            <li class="flex gap-2 pb-2 border-b border-gray-50"><span class="text-tz-savanna flex-shrink-0">→</span><span><a href="https://www.iucnredlist.org" target="_blank" rel="noopener noreferrer" class="font-semibold text-tz-dark hover:text-tz-savanna">IUCN Red List</a> — Conservation status for all wildlife species</span></li>
+            <li class="flex gap-2 pb-2 border-b border-gray-50"><span class="text-tz-savanna flex-shrink-0">→</span><span><a href="https://meteo.go.tz" target="_blank" rel="noopener noreferrer" class="font-semibold text-tz-dark hover:text-tz-savanna">Tanzania Meteorological Authority</a> — Historical climate data</span></li>
+            <li class="flex gap-2 pb-2 border-b border-gray-50"><span class="text-tz-savanna flex-shrink-0">→</span><span><a href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer" class="font-semibold text-tz-dark hover:text-tz-savanna">OpenStreetMap</a> — Geographic boundaries and roads (ODbL licence)</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><a href="https://unsplash.com" target="_blank" rel="noopener noreferrer" class="font-semibold text-tz-dark hover:text-tz-savanna">Unsplash</a> — Photography (Unsplash Licence)</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <button @click="open = open === 3 ? null : 3" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Are Xenohuru's photos copyright-free?</span>
+          <i :data-lucide="open === 3 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 3" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>Yes. Every photo on Xenohuru is sourced from <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer" class="text-tz-savanna hover:underline">Unsplash</a> under the Unsplash Licence, which permits free use for commercial and non-commercial purposes without attribution requirements. We never use images scraped from other websites or stock photo sites with restrictive licences.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CONTRIBUTE ─────────────────────────────────────────────────── -->
+  <section id="contribute" x-data="{ open: null }">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center"><i data-lucide="users" class="w-5 h-5 text-tz-savanna"></i></div>
+      <h2 class="font-display text-2xl font-bold text-tz-dark">Community & Contributions</h2>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-100 px-6 shadow-sm">
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 1 ? null : 1" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">How can I contribute to Xenohuru?</span>
+          <i :data-lucide="open === 1 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 1" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <ul class="space-y-2">
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Report a data error:</strong> Found an outdated entry fee or wrong GPS coordinate? Use the contact form or open a GitHub issue.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Submit a review:</strong> Visited an attraction? Leave a review directly on the attraction page.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Contribute to the codebase:</strong> The full platform is open-source. Open a pull request on GitHub.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Write for the blog:</strong> Pitch Tanzania guides, wildlife articles, or regional explainers.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">→</span><span><strong class="text-tz-dark">Sponsor the project:</strong> Cover hosting and development costs through our sponsor programme.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 2 ? null : 2" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Does Xenohuru have a community I can join?</span>
+          <i :data-lucide="open === 2 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 2" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <ul class="space-y-2">
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span><a href="https://github.com/xenohuru" target="_blank" rel="noopener noreferrer" class="font-semibold text-tz-dark hover:text-tz-savanna">GitHub</a> — Code discussions, issues, and pull requests</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span><a href="https://xenohuru.substack.com" target="_blank" rel="noopener noreferrer" class="font-semibold text-tz-dark hover:text-tz-savanna">Substack</a> — Long-form guides and project updates</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span><a href="{% url 'web:contact' %}" class="font-semibold text-tz-dark hover:text-tz-savanna">Contact / Email</a> — Reach the core team directly</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <button @click="open = open === 3 ? null : 3" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">How are contributions reviewed before they go live?</span>
+          <i :data-lucide="open === 3 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 3" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <ul class="space-y-1.5">
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>Data corrections are cross-checked against at least one official or verifiable source.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>User reviews are checked for spam and policy violations before appearing publicly.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>Code contributions are reviewed by maintainers for security and performance via GitHub pull request.</span></li>
+            <li class="flex gap-2"><span class="text-tz-savanna flex-shrink-0">·</span><span>Blog submissions are edited for factual accuracy and writing quality before publishing.</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── COSTS ─────────────────────────────────────────────────────── -->
+  <section id="costs" x-data="{ open: null }">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center"><i data-lucide="heart" class="w-5 h-5 text-tz-savanna"></i></div>
+      <h2 class="font-display text-2xl font-bold text-tz-dark">Development & Sustainability</h2>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-100 px-6 shadow-sm">
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 1 ? null : 1" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">What does it cost to run Xenohuru?</span>
+          <i :data-lucide="open === 1 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 1" x-collapse class="pb-5 text-tz-dark/80 text-sm">
+          <div class="space-y-2">
+            <div class="flex items-start gap-3 py-2 border-b border-gray-50 text-sm"><span class="text-tz-savanna font-semibold w-36 flex-shrink-0">Hosting & deployment</span><span class="font-bold text-tz-dark w-20 flex-shrink-0">~$15–30/mo</span><span class="text-tz-muted">DigitalOcean droplet for web platform and API</span></div>
+            <div class="flex items-start gap-3 py-2 border-b border-gray-50 text-sm"><span class="text-tz-savanna font-semibold w-36 flex-shrink-0">Database</span><span class="font-bold text-tz-dark w-20 flex-shrink-0">~$10–20/mo</span><span class="text-tz-muted">PostgreSQL database hosting</span></div>
+            <div class="flex items-start gap-3 py-2 border-b border-gray-50 text-sm"><span class="text-tz-savanna font-semibold w-36 flex-shrink-0">Weather API</span><span class="font-bold text-tz-dark w-20 flex-shrink-0">~$0–20/mo</span><span class="text-tz-muted">Open-Meteo (free tier) for weather data</span></div>
+            <div class="flex items-start gap-3 py-2 border-b border-gray-50 text-sm"><span class="text-tz-savanna font-semibold w-36 flex-shrink-0">CDN & images</span><span class="font-bold text-tz-dark w-20 flex-shrink-0">~$5–10/mo</span><span class="text-tz-muted">Cloudinary for image optimisation and delivery</span></div>
+            <div class="flex items-start gap-3 py-2 text-sm"><span class="text-tz-savanna font-semibold w-36 flex-shrink-0">Domain & email</span><span class="font-bold text-tz-dark w-20 flex-shrink-0">~$3–5/mo</span><span class="text-tz-muted">xenohuru.com + xenohuru.org</span></div>
+          </div>
+          <p class="text-sm font-bold text-tz-dark mt-4">Total: ~$33–85 / month — sustained entirely by community sponsorship.</p>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 2 ? null : 2" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">How is sponsorship money used?</span>
+          <i :data-lucide="open === 2 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 2" x-collapse class="pb-5 text-tz-dark/80 text-sm">
+          <div class="grid grid-cols-2 gap-3 mt-1">
+            <div class="bg-tz-light rounded-lg p-3 border border-gray-100"><p class="text-2xl font-bold text-tz-savanna">35%</p><p class="text-xs text-tz-muted mt-0.5">Hosting & infrastructure</p></div>
+            <div class="bg-tz-light rounded-lg p-3 border border-gray-100"><p class="text-2xl font-bold text-tz-savanna">25%</p><p class="text-xs text-tz-muted mt-0.5">API services & data</p></div>
+            <div class="bg-tz-light rounded-lg p-3 border border-gray-100"><p class="text-2xl font-bold text-tz-savanna">25%</p><p class="text-xs text-tz-muted mt-0.5">Feature development</p></div>
+            <div class="bg-tz-light rounded-lg p-3 border border-gray-100"><p class="text-2xl font-bold text-tz-savanna">15%</p><p class="text-xs text-tz-muted mt-0.5">Content & research</p></div>
+          </div>
+          <p class="mt-4">We do not use sponsorship funds for salaries, marketing spend, or profit.</p>
+        </div>
+      </div>
+
+      <div>
+        <button @click="open = open === 3 ? null : 3" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Is Xenohuru financially independent?</span>
+          <i :data-lucide="open === 3 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 3" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>Xenohuru has no venture capital, no advertising revenue, and no commercial partnerships that influence editorial content. To keep the platform free and running, some pages surface curated tour listings from vetted providers — these are always clearly presented as travel options, never as paid promotions. The long-term sustainability model is community sponsorship, similar to how Wikipedia and OpenStreetMap operate.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── DEV ─────────────────────────────────────────────────────── -->
+  <section id="dev" x-data="{ open: null }">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-tz-savanna/10 flex items-center justify-center"><i data-lucide="code-2" class="w-5 h-5 text-tz-savanna"></i></div>
+      <h2 class="font-display text-2xl font-bold text-tz-dark">Technical & Developer</h2>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-100 px-6 shadow-sm">
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 1 ? null : 1" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">What technology does Xenohuru use?</span>
+          <i :data-lucide="open === 1 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 1" x-collapse class="pb-5 text-tz-dark/80 text-sm">
+          <ul class="space-y-1.5">
+            <li class="flex gap-2 pb-1.5 border-b border-gray-50"><span class="font-semibold text-tz-dark w-24 flex-shrink-0">Backend</span><span>Django (full-stack, server-side templates)</span></li>
+            <li class="flex gap-2 pb-1.5 border-b border-gray-50"><span class="font-semibold text-tz-dark w-24 flex-shrink-0">Database</span><span>PostgreSQL</span></li>
+            <li class="flex gap-2 pb-1.5 border-b border-gray-50"><span class="font-semibold text-tz-dark w-24 flex-shrink-0">Frontend</span><span>Django Templates + HTMX + Alpine.js + Tailwind CSS v4</span></li>
+            <li class="flex gap-2 pb-1.5 border-b border-gray-50"><span class="font-semibold text-tz-dark w-24 flex-shrink-0">Maps</span><span>Leaflet.js</span></li>
+            <li class="flex gap-2 pb-1.5 border-b border-gray-50"><span class="font-semibold text-tz-dark w-24 flex-shrink-0">Weather</span><span>Open-Meteo API (free, no account required)</span></li>
+            <li class="flex gap-2 pb-1.5 border-b border-gray-50"><span class="font-semibold text-tz-dark w-24 flex-shrink-0">Images</span><span>Cloudinary CDN — WebP/AVIF delivery</span></li>
+            <li class="flex gap-2"><span class="font-semibold text-tz-dark w-24 flex-shrink-0">Hosting</span><span>DigitalOcean droplet</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-100">
+        <button @click="open = open === 2 ? null : 2" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">Can I use the Xenohuru API in my own project?</span>
+          <i :data-lucide="open === 2 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 2" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>Yes. The Xenohuru public API is open and free for non-commercial use. Read-only endpoints for attractions, regions, blog posts, and weather require no authentication. Fair use applies — automated bulk scraping that impacts server performance is blocked.</p>
+          <p class="mt-3">API base URL: <code class="bg-tz-light text-tz-savanna px-1.5 py-0.5 rounded text-xs font-mono">/api/v1/</code></p>
+        </div>
+      </div>
+
+      <div>
+        <button @click="open = open === 3 ? null : 3" class="w-full flex items-start justify-between gap-4 py-5 text-left group">
+          <span class="font-semibold text-tz-dark group-hover:text-tz-savanna transition-colors leading-snug">How do I report a security vulnerability?</span>
+          <i :data-lucide="open === 3 ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 text-tz-muted flex-shrink-0 mt-0.5"></i>
+        </button>
+        <div x-show="open === 3" x-collapse class="pb-5 text-tz-dark/80 leading-relaxed text-sm">
+          <p>Do not open a public GitHub issue for security vulnerabilities. Email us directly at <a href="mailto:hello@xenohuru.org" class="text-tz-savanna hover:underline">hello@xenohuru.org</a> with a description. We aim to respond within 48 hours and will credit responsible disclosure in our changelog.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STILL HAVE QUESTIONS -->
+  <div class="bg-tz-dark rounded-2xl p-8 text-center text-white">
+    <i data-lucide="mail" class="w-8 h-8 mx-auto mb-4 text-tz-savanna"></i>
+    <h2 class="font-display text-2xl font-bold mb-3">Still have questions?</h2>
+    <p class="text-white/70 mb-6">Can't find what you're looking for? Reach the team directly.</p>
+    <div class="flex flex-wrap gap-3 justify-center">
+      <a href="{% url 'web:contact' %}" class="px-5 py-2.5 bg-tz-savanna text-white rounded-lg hover:bg-tz-savanna/90 transition-colors font-medium text-sm">Contact Us</a>
+      <a href="https://github.com/xenohuru" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-5 py-2.5 border border-white/20 text-white rounded-lg hover:border-tz-savanna hover:text-tz-savanna transition-colors font-medium text-sm"><i data-lucide="github" class="w-4 h-4"></i> GitHub</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}
