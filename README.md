@@ -32,8 +32,9 @@ This is the backend API. There's a separate frontend repo.
 ### Setup
 
 ```bash
-git clone https://github.com/xenohuru/xenohuru-core.git
-cd xenohuru-core
+git clone https://github.com/Xenohuru/core.git
+cd core
+
 
 python -m venv venv
 source venv/bin/activate
